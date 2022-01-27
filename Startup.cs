@@ -1,4 +1,4 @@
-﻿using digify.Models;
+﻿using digify.Shared;
 using Microsoft.EntityFrameworkCore;
 
 namespace digify;
@@ -15,9 +15,7 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddControllers();
-        services.AddDbContext<DatabaseContext>(options =>
-            options.UseNpgsql(Configuration.GetValue<string>("database:postgresConnectionString"))
-            );
+        services.AddDbContext<DatabaseContext>();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
