@@ -7,7 +7,7 @@ namespace digify.Controllers;
 [ApiController]
 public class ServerInformationController : ControllerBase
 {
-    [HttpGet("/server-information")]
+    [HttpGet("/api/server-information")]
     public IActionResult ServerInformation()
     {
         return Ok(new ServerInformation("v1"));

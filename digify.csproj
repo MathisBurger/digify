@@ -14,6 +14,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="JWT" Version="8.9.0" />
+    <PackageReference Include="Konscious.Security.Cryptography.Argon2" Version="1.2.1" />
     <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="6.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
