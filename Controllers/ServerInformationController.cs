@@ -3,12 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace digify.Controllers;
 
+[Route("[controller]")]
 [ApiController]
 public class ServerInformationController : ControllerBase
 {
-    [HttpGet("/api/server-information")]
-    public ActionResult<ServerInformation> Index()
+    [HttpGet("/server-information")]
+    public IActionResult ServerInformation()
     {
-        return new ServerInformation("v1");
+        return Ok(new ServerInformation("v1"));
     }
 }

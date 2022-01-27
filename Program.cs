@@ -1,27 +1,29 @@
-var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+using digify.Shared;
 
-builder.Services.AddControllersWithViews();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+namespace digify
 {
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            CreateWebHostBuilder(args).Build().Run();
+        }
+
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args)
+        {
+            var config = Configuration.ParseConfig();
+            var url = config.GetValue<string>("HostURL");
+
+            return new WebHostBuilder()
+                .UseKestrel()
+                .UseConfiguration(config)
+                .UseUrls(config.GetValue<string>("HostURL") ?? "http://localhost:80")
+                .UseDefaultServiceProvider((context, options) =>
+                {
+                    options.ValidateScopes = context.HostingEnvironment.IsDevelopment();
+                })
+                .UseStartup<Startup>();
+        }
+    }
 }
-
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-app.UseRouting();
-
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller}/{action=Index}/{id?}");
-
-app.MapFallbackToFile("index.html");;
-
-app.Run();
