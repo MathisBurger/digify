@@ -18,6 +18,7 @@ public class Startup
         services.AddControllers();
         services.AddDbContext<DatabaseContext>();
         services.AddSingleton<IPasswordHasher, Argon2idHasher>();
+        services.AddSingleton<IAuthorization, JWTAuthorization>();
         services.AddSingleton<FixtureLoader>();
     }
 

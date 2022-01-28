@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using digify.AccessVoter;
 using digify.Models;
 using digify.Util;
 
@@ -46,4 +47,14 @@ public class JWTAuthorization: IAuthorization
 
     public AuthClaims ValidateAuth(string token) =>
         new AuthClaims(Builder.MustVerifySignature().Decode<IDictionary<string, object>>(token));
+
+    public bool IsGranted(User user, string action, IVoter voter)
+    {
+        if (user.Roles.Contains(action))
+        {
+            return true;
+        }
+        voter.SetActionUser(user);
+        return voter.VoteOnAttribute(action);
+    }
 }

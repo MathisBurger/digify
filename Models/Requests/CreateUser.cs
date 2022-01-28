@@ -3,15 +3,17 @@ using System.Text.Json.Serialization;
 
 namespace digify.Models.Requests;
 
-public class AuthCredentials
+public class CreateUser
 {
-    [JsonPropertyName("login_name")]
+    [JsonPropertyName("name")]
     [Required]
-    public string LoginName { get; set; }
+    public string Username { get; set; }
     
     [JsonPropertyName("password")]
     [Required]
     public string Password { get; set; }
-
-    private string loginName;
+    
+    [JsonPropertyName("roles")]
+    [Required]
+    public string[] Roles { get; set; }
 }

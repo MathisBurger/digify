@@ -24,6 +24,7 @@ public class UserFixture : IFixture
         var adminUser = new User();
         adminUser.Username = ADMIN_USERNAME;
         adminUser.Password = hasher.HashFromPassword(ADMIN_PASSWORD);
+        adminUser.Roles = new string[] {User.ROLE_ADMIN};
         db.Users.Add(adminUser);
         db.SaveChanges();
     }
