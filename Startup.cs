@@ -1,4 +1,5 @@
-﻿using digify.Shared;
+﻿using digify.Modules;
+using digify.Shared;
 using Microsoft.EntityFrameworkCore;
 
 namespace digify;
@@ -16,9 +17,11 @@ public class Startup
     {
         services.AddControllers();
         services.AddDbContext<DatabaseContext>();
+        services.AddSingleton<IPasswordHasher, Argon2idHasher>();
+        services.AddSingleton<FixtureLoader>();
     }
 
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, FixtureLoader loader)
     {
         if (!env.IsDevelopment())
         {
@@ -34,5 +37,6 @@ public class Startup
         {
             endpoints.MapControllers();
         });
+        loader.Load().Wait();
     }
 }

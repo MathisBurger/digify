@@ -15,7 +15,7 @@ public class Entity
     public Entity()
     {
         Id = Guid.NewGuid();
-        Created = DateTime.Now;
+        Created = DateTime.Now.ToUniversalTime();
     }
 
     public Entity(Entity entity)

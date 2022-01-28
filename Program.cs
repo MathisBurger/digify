@@ -13,7 +13,6 @@ namespace digify
         public static IWebHostBuilder CreateWebHostBuilder(string[] args)
         {
             var config = Configuration.ParseConfig();
-            var url = config.GetValue<string>("HostURL");
 
             return new WebHostBuilder()
                 .UseKestrel()

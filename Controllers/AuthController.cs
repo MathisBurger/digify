@@ -24,7 +24,7 @@ public class AuthController : ControllerBase
         auth = _auth;
         useSecureCookies = _config.GetValue("Authorization:UseSecureCookies", true);
     }
-
+    [HttpGet("/api/auth/login")]
     public async Task<ActionResult> Login([FromBody] AuthCredentials creds)
     {
         var user = await db.Users.Where(u => u.Username == creds.LoginName).FirstOrDefaultAsync();
