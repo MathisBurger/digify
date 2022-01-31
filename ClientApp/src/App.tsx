@@ -1,13 +1,16 @@
-import React, { Component } from 'react';
+import {BrowserRouter, Route, Switch} from "react-router-dom";
+import LoginPage from "./pages/LoginPage";
 
-export default class App extends Component {
-  static displayName = App.name;
 
-  render () {
-    return (
-      <div>
-          Hello World
-      </div>
-    );
-  }
+const App = () => {
+  
+  return (
+      <BrowserRouter>
+          <Switch>
+              <Route path="/login" component={LoginPage} />
+          </Switch>
+      </BrowserRouter>
+  )
 }
+
+export default App;

@@ -2,6 +2,6 @@
 
 public interface IFixture
 {
-    void Load();
+    Task Load();
     Task<bool> NotExists();
 }

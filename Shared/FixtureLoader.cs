@@ -19,8 +19,8 @@ public class FixtureLoader
     public async Task Load()
     {
         var userFixture = new UserFixture(Context, Hasher);
-        if (await userFixture.NotExists()) userFixture.Load();
-        
+        if (await userFixture.NotExists()) await userFixture.Load();
+
         Logger.LogInformation("Loaded fixtures");
     }
 }

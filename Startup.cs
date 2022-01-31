@@ -1,6 +1,5 @@
 ﻿using digify.Modules;
 using digify.Shared;
-using Microsoft.EntityFrameworkCore;
 
 namespace digify;
 
@@ -15,10 +14,15 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
+        
+        var jwtSigningKey = Configuration.GetValue<string>("Authorization:JWTSigningKey");
         services.AddControllers();
         services.AddDbContext<DatabaseContext>();
-        services.AddSingleton<IPasswordHasher, Argon2idHasher>();
-        services.AddSingleton<IAuthorization, JWTAuthorization>();
+        services.AddSingleton<IPasswordHasher, Argon2IdHasher>();
+            services.AddSingleton<IAuthorization>((services) => jwtSigningKey == null
+                ? new JWTAuthorization()
+                : new JWTAuthorization(jwtSigningKey))
+            ;
         services.AddSingleton<FixtureLoader>();
     }
 
@@ -28,6 +32,13 @@ public class Startup
         {
             app.UseHsts();
         }
+        app.UseCors(options =>
+        {
+            options
+                .AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
 
         app.UseHttpsRedirection();
         app.UseStaticFiles();

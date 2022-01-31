@@ -12,35 +12,35 @@ namespace digify.Controllers;
 [ApiController]
 public class AuthController : ControllerBase
 {
-    private readonly DatabaseContext db;
-    private readonly IPasswordHasher hasher;
+    private readonly DatabaseContext Db;
+    private readonly IPasswordHasher Hasher;
     private readonly IAuthorization auth;
     private readonly bool useSecureCookies;
 
     public AuthController(DatabaseContext _db, IPasswordHasher _hasher, IAuthorization _auth, IConfiguration _config)
     {
-        db = _db;
-        hasher = _hasher;
+        Db = _db;
+        Hasher = _hasher;
         auth = _auth;
         useSecureCookies = _config.GetValue("Authorization:UseSecureCookies", true);
     }
-    [HttpGet("/api/auth/login")]
+    [HttpPost("/auth/login")]
     public async Task<ActionResult> Login([FromBody] AuthCredentials creds)
     {
-        var user = await db.Users.Where(u => u.Username == creds.LoginName).FirstOrDefaultAsync();
+        var user = await Db.Users.Where(u => u.Username == creds.LoginName).FirstOrDefaultAsync();
         if (user == null)
         {
             return Unauthorized();
         }
 
-        if (!hasher.CompareHashAndPassword(user.Password, creds.Password)) return Unauthorized();
-
-        var sessionJwt = auth.GetAuthToken(new AuthClaims(user.Id));
+        
+        if (!Hasher.CompareHashAndPassword(user.Password, creds.Password)) return Unauthorized();
+        var sessionJwt = auth.GetAuthToken(new AuthClaims(userId: user.Id));
         var cookieOptions = new CookieOptions()
         {
             HttpOnly = true,
             MaxAge = Constants.SESSION_EXPIRATION,
-            Secure = useSecureCookies
+            Secure = true
         };
         Response.Cookies.Append(Constants.SESSION_COOKIE_NAME, sessionJwt, cookieOptions);
         return Ok();

@@ -12,8 +12,8 @@ using digify.Shared;
 namespace digify.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20220128065733_updateUser")]
-    partial class updateUser
+    [Migration("20220128204754_addUser")]
+    partial class addUser
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -36,6 +36,10 @@ namespace digify.Migrations
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<string[]>("Roles")
+                        .IsRequired()
+                        .HasColumnType("text[]");
 
                     b.Property<string>("Username")
                         .IsRequired()
