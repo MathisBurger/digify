@@ -1,4 +1,4 @@
-﻿import RestService from "./RestService";
+import RestService from "./RestService";
 
 const ORIGIN = process.env.NODE_ENV === "production" ? '/api' : 'http://localhost:5000';
 

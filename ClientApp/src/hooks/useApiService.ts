@@ -1,4 +1,4 @@
-﻿import APIService from "../services/ApiService";
+import APIService from "../services/ApiService";
 
 const useApiService = () => new APIService();
 

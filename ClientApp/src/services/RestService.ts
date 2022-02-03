@@ -1,4 +1,4 @@
-﻿export default class RestService {
+export default class RestService {
 
     /**
      * The general shaped request function for doing a
