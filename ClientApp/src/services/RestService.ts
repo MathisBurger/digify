@@ -24,8 +24,12 @@ export default class RestService {
             mode: process.env.NODE_ENV === "production" ? "same-origin" : "cors",
             headers: {
                 'Content-Type': contentType
-            }
+            },
+            credentials: process.env.NODE_ENV === "production" ? "same-origin" : "include"
         });
+        if (fetchResult.status === 401) {
+            //window.location.replace("/login");
+        }
         if (fetchResult.status !== 200 && fetchResult.status !== 204) {
             // Parse to generic error response
             throw new Error('Something went wrong');

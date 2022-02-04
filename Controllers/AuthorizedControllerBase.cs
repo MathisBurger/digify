@@ -1,13 +1,12 @@
 ﻿using digify.Models;
 using digify.Modules;
+using digify.Shared;
 using Microsoft.AspNetCore.Mvc;
 
 namespace digify.Controllers;
 
 public class AuthorizedControllerBase : ControllerBase
 {
-
-    public IAuthorization Authorization { get; set; }
 
     public AuthClaims AuthClaims { get; set; }
     

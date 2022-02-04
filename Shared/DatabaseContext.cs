@@ -5,21 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace digify.Shared;
 
-public class DatabaseContext : DbContext
+public class DatabaseContext : DbContext, IContext
 {
     public DbSet<User> Users { get; set; }
-
-    private readonly IConfiguration Configuration;
-    public DatabaseContext(IConfiguration configuration)
-    {
-        Configuration = configuration;
-        Database.EnsureCreated();
-    }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        var connectionString = Configuration.GetValue<string>("database:postgresConnectionString");
-        optionsBuilder.UseNpgsql(connectionString);
-        base.OnConfiguring(optionsBuilder);
-    }
+    
+    public DatabaseContext(DbContextOptions options) : base(options)
+    { }
 }

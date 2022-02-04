@@ -22,7 +22,7 @@ public class AuthController : ControllerBase
         Db = _db;
         Hasher = _hasher;
         auth = _auth;
-        useSecureCookies = _config.GetValue("Authorization:UseSecureCookies", true);
+        useSecureCookies = _config.GetValue("Authorization:UseSecureCookies", false);
     }
     [HttpPost("/auth/login")]
     public async Task<ActionResult> Login([FromBody] AuthCredentials creds)
@@ -40,9 +40,11 @@ public class AuthController : ControllerBase
         {
             HttpOnly = true,
             MaxAge = Constants.SESSION_EXPIRATION,
-            Secure = true
+            Secure = useSecureCookies,
+            SameSite = SameSiteMode.Lax
         };
         Response.Cookies.Append(Constants.SESSION_COOKIE_NAME, sessionJwt, cookieOptions);
+        Response.Headers.AccessControlExposeHeaders = "Set-Cookie";
         return Ok();
     } 
 }

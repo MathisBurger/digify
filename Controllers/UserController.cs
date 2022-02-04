@@ -1,4 +1,5 @@
 ﻿using digify.AccessVoter;
+using digify.Filters;
 using digify.Models;
 using digify.Models.Requests;
 using digify.Modules;
@@ -12,6 +13,7 @@ public class UserController : AuthorizedControllerBase
 {
     private readonly DatabaseContext Db;
     private readonly IPasswordHasher Hasher;
+    private readonly IAuthorization Authorization;
 
     public UserController(IAuthorization authorization, DatabaseContext _db, IPasswordHasher hasher)
     {
@@ -22,6 +24,7 @@ public class UserController : AuthorizedControllerBase
 
 
     [HttpGet("/user/me")]
+    [TypeFilter(typeof(RequiresAuthorization))]
     public ActionResult<User> Me() => Ok(AuthorizedUser);
 
     [HttpGet("/user/create")]

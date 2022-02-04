@@ -1,5 +1,7 @@
 ﻿using digify.Modules;
 using digify.Shared;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace digify;
 
@@ -17,38 +19,38 @@ public class Startup
         
         var jwtSigningKey = Configuration.GetValue<string>("Authorization:JWTSigningKey");
         services.AddControllers();
-        services.AddDbContext<DatabaseContext>();
+        services.AddDbContext<IContext, DatabaseContext>(ctx =>
+            ctx.UseNpgsql(Configuration.GetValue<string>("database:postgresConnectionString"))
+        );
         services.AddSingleton<IPasswordHasher, Argon2IdHasher>();
             services.AddSingleton<IAuthorization>((services) => jwtSigningKey == null
                 ? new JWTAuthorization()
                 : new JWTAuthorization(jwtSigningKey))
             ;
-        services.AddSingleton<FixtureLoader>();
+        //services.AddSingleton<FixtureLoader>();
     }
 
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, FixtureLoader loader)
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
-        if (!env.IsDevelopment())
+        if (env.IsDevelopment())
         {
-            app.UseHsts();
-        }
-        app.UseCors(options =>
-        {
-            options
-                .AllowAnyOrigin()
+            app.UseDeveloperExceptionPage();
+            app.UseCors(cors => cors
+                .WithOrigins("https://localhost:44415")
                 .AllowAnyHeader()
-                .AllowAnyMethod();
-        });
+                .AllowAnyMethod()
+                .AllowCredentials());
+        }
 
         app.UseHttpsRedirection();
-        app.UseStaticFiles();
+
         app.UseRouting();
-        app.UseAuthentication();
+
         app.UseAuthorization();
+
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
         });
-        loader.Load().Wait();
     }
 }

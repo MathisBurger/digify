@@ -1,6 +1,6 @@
 import RestService from "./RestService";
 
-const ORIGIN = process.env.NODE_ENV === "production" ? '/api' : 'http://localhost:5000';
+const ORIGIN = process.env.NODE_ENV === "production" ? '/api' : 'https://localhost:5001';
 
 export default class APIService extends RestService {
 
@@ -15,5 +15,9 @@ export default class APIService extends RestService {
             login_name: username,
             password: password
         }), true);
+    }
+    
+    public async me(): Promise<any> {
+        return await this.get<any>(`${ORIGIN}/user/me`);
     }
 }
