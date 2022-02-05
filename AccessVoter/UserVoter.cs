@@ -5,6 +5,7 @@ namespace digify.AccessVoter;
 public class UserVoter : IVoter
 {
     public const string CREATE_USER = "CREATE_USER";
+    public const string ALL_USERS = "ALL_USERS";
 
     private User ActionUser { get; set; }
 
@@ -17,14 +18,15 @@ public class UserVoter : IVoter
     {
         switch (action)
         {
+            case ALL_USERS:
             case CREATE_USER:
-                return this.userCanCreateUser();
+                return UserCanCreateUser();
             default:
                 return false;
         }
     }
 
-    private bool userCanCreateUser()
+    private bool UserCanCreateUser()
     {
         return ActionUser.Roles.Contains(User.ROLE_ADMIN);
     }

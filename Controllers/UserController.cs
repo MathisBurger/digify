@@ -44,4 +44,17 @@ public class UserController : AuthorizedControllerBase
         await Db.SaveChangesAsync();
         return Ok(user);
     }
+
+    [HttpGet("/user/allUsers")]
+    [TypeFilter(typeof(RequiresAuthorization))]
+    public ActionResult<List<User>> AllUsers()
+    {
+        if (!Authorization.IsGranted(AuthorizedUser, UserVoter.ALL_USERS, new UserVoter()))
+        {
+            return Unauthorized();
+        }
+
+        var users = Db.Users.Select(x => x).ToList();
+        return Ok(users);
+    }
 }

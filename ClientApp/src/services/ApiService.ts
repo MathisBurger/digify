@@ -21,4 +21,8 @@ export default class APIService extends RestService {
     public async me(): Promise<User> {
         return await this.get<User>(`${ORIGIN}/user/me`);
     }
+    
+    public async allUsers(): Promise<User[]> {
+        return await this.get<User[]>(`${ORIGIN}/user/allUsers`);
+    }
 }
