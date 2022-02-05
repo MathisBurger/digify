@@ -1,5 +1,5 @@
 import RestService from "./RestService";
-import {User} from "../types/Models/User";
+import {RequestUser, User} from "../types/Models/User";
 
 const ORIGIN = process.env.NODE_ENV === "production" ? '/api' : 'https://localhost:5001';
 
@@ -24,5 +24,9 @@ export default class APIService extends RestService {
     
     public async allUsers(): Promise<User[]> {
         return await this.get<User[]>(`${ORIGIN}/user/allUsers`);
+    }
+    
+    public async createUser(user: RequestUser): Promise<User> {
+        return await this.post<User>(`${ORIGIN}/user/create`, JSON.stringify(user));
     }
 }

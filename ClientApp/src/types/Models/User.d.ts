@@ -6,3 +6,9 @@ export interface User {
     roles: UserRole[];
     username: string;
 }
+
+export interface RequestUser {
+    name: string;
+    password: string;
+    roles: UserRole[];
+}

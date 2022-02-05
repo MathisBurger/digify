@@ -1,11 +1,13 @@
 ﻿import PageLayout, {SidebarAction} from "../components/PageLayout";
-import {List} from "@mui/icons-material";
+import {Add, List} from "@mui/icons-material";
 import {useState} from "react";
 import UsersList from "../components/users/UsersList";
+import CreateUser from "../components/users/CreateUser";
 
 enum Pages {
-    ListPage
-}
+    ListPage,
+    CreatePage,
+};
 
 const UsersPage = () => {
     
@@ -16,7 +18,12 @@ const UsersPage = () => {
         {
             icon: List,
             text: "List",
-            action: () => console.log("Interessant")
+            action: () => setPage(Pages.ListPage)
+        },
+        {
+            icon: Add,
+            text: "Create",
+            action: () => setPage(Pages.CreatePage)
         }
     ];
     
@@ -24,6 +31,8 @@ const UsersPage = () => {
         switch (page) {
             case Pages.ListPage:
                 return <UsersList />;
+            case Pages.CreatePage:
+                return <CreateUser />;
             default:
                 return <UsersList />;
         }

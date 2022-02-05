@@ -27,7 +27,7 @@ public class UserController : AuthorizedControllerBase
     [TypeFilter(typeof(RequiresAuthorization))]
     public ActionResult<User> Me() => Ok(AuthorizedUser);
 
-    [HttpGet("/user/create")]
+    [HttpPost("/user/create")]
     [TypeFilter(typeof(RequiresAuthorization))]
     public async Task<ActionResult<User>> CreateUser([FromBody] CreateUser request)
     {

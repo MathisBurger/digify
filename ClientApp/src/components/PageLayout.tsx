@@ -42,7 +42,7 @@ const PageLayout = ({
                             <Card>
                                 <List>
                                     {sidebarActions?.map((action, index) => (
-                                        <ListItem button key={index}>
+                                        <ListItem button key={index} onClick={action.action}>
                                             {action.icon ? (
                                                 <ListItemIcon>
                                                     <SvgIcon component={action.icon} />
