@@ -4,6 +4,7 @@ import useApiService from "../../hooks/useApiService";
 import {DataGrid, GridCellParams, GridColDef, GridRenderCellParams} from "@mui/x-data-grid";
 import {UserRole} from "../../types/Models/UserRole";
 import {Chip, Grid} from "@mui/material";
+import DataList from "../DataList/DataList";
 
 const UsersList = () => {
     
@@ -13,7 +14,7 @@ const UsersList = () => {
     useEffect(() => {
         const fetcher = async () => setUsers(await apiService.allUsers());
         fetcher();
-    }, [apiService]);
+    }, []);
 
     const columns: GridColDef[] = [
         {
@@ -34,8 +35,8 @@ const UsersList = () => {
             headerName: 'Roles',
             renderCell: ({value}: GridRenderCellParams) => (
                 <Grid container direction="row">
-                    {Object.values(value as UserRole[]).map(role => (
-                        <Chip color="primary" variant="outlined" label={role} />
+                    {Object.values(value as UserRole[]).map((role, i) => (
+                        <Chip color="primary" variant="outlined" label={role} key={i} />
                     ))}
                 </Grid>
             ),
@@ -44,19 +45,8 @@ const UsersList = () => {
         }
     ];
     
-    const prepareContent = () => {
-        return users.map((user, index) => ({...user, ghostID: index}));
-    }
-    
     return (
-        <div style={{width: '100%', height: 300}}>
-            <DataGrid
-                columns={columns}
-                rows={prepareContent()}
-                getRowId={(row) => row.ghostID}
-                checkboxSelection
-            />
-        </div>
+        <DataList columns={columns} rows={users} />
     );
 }
 
