@@ -11,8 +11,8 @@ const Navbar = () => {
         <AppBar
             position="static"
             color="default"
-            elevation={0}
-            sx={{ borderBottom: (theme) => `1px solid ${theme.palette.divider}` }}
+            elevation={1}
+            sx={{ borderBottom: (theme) => `1px solid ${theme.palette.divider}`, borderRadius: '10px' }}
         >
             <Toolbar sx={{ flexWrap: 'wrap' }}>
                 <Typography variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
@@ -31,7 +31,7 @@ const Navbar = () => {
                         <Link
                             variant="button"
                             color="text.primary"
-                            href="/users"
+                            href="/user-management"
                             sx={{ my: 1, mx: 1.5 }}
                         >
                             Users
