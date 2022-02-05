@@ -11,11 +11,11 @@ namespace digify.Controllers;
 [ApiController]
 public class UserController : AuthorizedControllerBase
 {
-    private readonly DatabaseContext Db;
+    private readonly IContext Db;
     private readonly IPasswordHasher Hasher;
     private readonly IAuthorization Authorization;
 
-    public UserController(IAuthorization authorization, DatabaseContext _db, IPasswordHasher hasher)
+    public UserController(IAuthorization authorization, IContext _db, IPasswordHasher hasher)
     {
         Authorization = authorization;
         Db = _db;

@@ -10,4 +10,7 @@ public class User: Entity
     public string Password { get; set; }
     
     public string[] Roles { get; set; }
+    
+    public Class? schoolClass { get; set; }
+    public ICollection<Class> classes { get; set; }
 }

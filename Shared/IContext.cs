@@ -9,6 +9,7 @@ namespace digify.Shared;
 public interface IContext : IDisposable
 {
     DbSet<User> Users { get; set; }
+    DbSet<Class> Classes { get; set; }
 
     DatabaseFacade Database { get; }
 
