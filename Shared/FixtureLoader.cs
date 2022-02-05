@@ -3,22 +3,20 @@ using digify.Modules;
 
 namespace digify.Shared;
 
-public class FixtureLoader
+public class FixtureLoader : IFixtureLoader
 {
     private readonly ILogger<FixtureLoader> Logger;
-    private readonly DatabaseContext Context;
     private readonly IPasswordHasher Hasher;
 
-    public FixtureLoader(ILogger<FixtureLoader> _logger, DatabaseContext _context, IPasswordHasher _hasher)
+    public FixtureLoader(ILogger<FixtureLoader> _logger, IPasswordHasher _hasher)
     {
         Logger = _logger;
-        Context = _context;
         Hasher = _hasher;
     }
     
-    public async Task Load()
+    public async Task Load(IContext context)
     {
-        var userFixture = new UserFixture(Context, Hasher);
+        var userFixture = new UserFixture(context, Hasher);
         if (await userFixture.NotExists()) await userFixture.Load();
 
         Logger.LogInformation("Loaded fixtures");

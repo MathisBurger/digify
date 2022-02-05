@@ -5,7 +5,7 @@ import {UserRole} from "../types/Models/UserRole";
 
 const Navbar = () => {
     
-    const currentUser = useCurrentUser();
+    const {user} = useCurrentUser();
     
     return (
         <AppBar
@@ -27,7 +27,7 @@ const Navbar = () => {
                     >
                         Home
                     </Link>
-                    {currentUser?.roles.includes(UserRole.ADMIN) ? (
+                    {user?.roles.includes(UserRole.ADMIN) ? (
                         <Link
                             variant="button"
                             color="text.primary"

@@ -17,7 +17,10 @@ const DataProvider = ({children}: PropsWithChildren<any>) => {
     }, []);
     
     return (
-        <CurrentUserContext.Provider value={currentUser}>
+        <CurrentUserContext.Provider value={{
+            user: currentUser,
+            setUser: setCurrentUser
+        }}>
             {children}
         </CurrentUserContext.Provider>
     )

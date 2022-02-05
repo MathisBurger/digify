@@ -7,13 +7,13 @@ namespace digify.Fixtures;
 
 public class UserFixture : IFixture
 {
-    private readonly DatabaseContext db;
+    private readonly IContext db;
     private readonly IPasswordHasher hasher;
 
     public const string ADMIN_USERNAME = "admin";
     public const string ADMIN_PASSWORD = "123";
 
-    public UserFixture(DatabaseContext _db, IPasswordHasher _hasher)
+    public UserFixture(IContext _db, IPasswordHasher _hasher)
     {
         db = _db;
         hasher = _hasher;

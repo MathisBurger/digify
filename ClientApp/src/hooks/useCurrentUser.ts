@@ -1,7 +1,15 @@
-﻿import {createContext, useContext} from "react";
+﻿import React, {createContext, useContext} from "react";
 import {User} from "../types/Models/User";
 
-export const CurrentUserContext = createContext<null|User>(null);
+type ContextType = {
+    user: null|User;
+    setUser:  React.Dispatch<React.SetStateAction<User | null>>|null;
+}
+
+export const CurrentUserContext = createContext<ContextType>({
+    user: null,
+    setUser: null
+});
 
 const useCurrentUser = () => useContext(CurrentUserContext);
 

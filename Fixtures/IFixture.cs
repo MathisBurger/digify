@@ -1,4 +1,6 @@
-﻿namespace digify.Fixtures;
+﻿using digify.Shared;
+
+namespace digify.Fixtures;
 
 public interface IFixture
 {

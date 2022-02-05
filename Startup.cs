@@ -27,7 +27,10 @@ public class Startup
                 ? new JWTAuthorization()
                 : new JWTAuthorization(jwtSigningKey))
             ;
-        //services.AddSingleton<FixtureLoader>();
+        services.AddSingleton<IFixtureLoader>((provider) => new FixtureLoader(
+            provider.GetService<ILogger<FixtureLoader>>()!,
+            provider.GetService<IPasswordHasher>()!
+            ));
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -52,5 +55,13 @@ public class Startup
         {
             endpoints.MapControllers();
         });
+
+        using (var scope = app.ApplicationServices.CreateScope())
+        using (var db = scope.ServiceProvider.GetService<IContext>()!)
+        {
+            var fixtureLoader = scope.ServiceProvider.GetService<IFixtureLoader>()!;
+            db.Database.Migrate();
+            fixtureLoader.Load(db).Wait();
+        }
     }
 }
