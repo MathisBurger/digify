@@ -14,6 +14,10 @@ public class Startup
         Configuration = configuration;
     }
 
+    /// <summary>
+    /// Configures all services that are used
+    /// with dependency injection
+    /// </summary>
     public void ConfigureServices(IServiceCollection services)
     {
         
@@ -33,6 +37,9 @@ public class Startup
             ));
     }
 
+    /// <summary>
+    /// Configures the webapp 
+    /// </summary>
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
         if (env.IsDevelopment())

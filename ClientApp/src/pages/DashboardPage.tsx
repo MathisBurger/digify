@@ -1,6 +1,8 @@
 ﻿import Navbar from "../components/Navbar";
 
-
+/**
+ * Dashboard page
+ */
 const DashboardPage = () => {
     
     return (

@@ -14,6 +14,9 @@ import {Alert, Card, CardContent, Grid, Snackbar} from "@mui/material";
 import {useState} from "react";
 import useCurrentUser, {CurrentUserContext} from "../hooks/useCurrentUser";
 
+/**
+ * Login page
+ */
 const LoginPage = () => {
     
     const apiService = useApiService();

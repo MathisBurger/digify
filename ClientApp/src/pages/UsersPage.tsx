@@ -7,8 +7,11 @@ import CreateUser from "../components/users/CreateUser";
 enum Pages {
     ListPage,
     CreatePage,
-};
+}
 
+/**
+ * Users page
+ */
 const UsersPage = () => {
     
     const [title, setTitle] = useState<string|null>(null);

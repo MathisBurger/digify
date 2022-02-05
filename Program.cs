@@ -10,6 +10,9 @@ namespace digify
             CreateWebHostBuilder(args).Build().Run();
         }
 
+        /// <summary>
+        /// Creates a web host app
+        /// </summary>
         public static IHostBuilder CreateWebHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
