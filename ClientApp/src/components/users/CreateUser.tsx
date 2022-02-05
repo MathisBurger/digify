@@ -6,7 +6,9 @@ import useApiService from "../../hooks/useApiService";
 import useSnackbar from "../../hooks/useSnackbar";
 
 
-
+/**
+ * Window that is used for creating a new user in the system
+ */
 const CreateUser = () => {
     
     const [user, setUser] = useState<RequestUser>({name: "", password: "", roles: []});

@@ -5,7 +5,9 @@ import {Alert} from "@mui/material";
 import * as React from "react";
 import {Snackbar as MuiSnackbar} from "@mui/material";
 
-
+/**
+ * The snackbar component that can be used on global scope
+ */
 const Snackbar = ({children}: React.PropsWithChildren<any>) => {
     
     const [snackbarOpen, setSnackbarOpen] = useState<boolean>(true);

@@ -6,6 +6,9 @@ import {UserRole} from "../../types/Models/UserRole";
 import {Chip, Grid} from "@mui/material";
 import DataList from "../DataList/DataList";
 
+/**
+ * A list of all users that are existing in the system
+ */
 const UsersList = () => {
     
     const [users, setUsers] = useState<User[]>([]);

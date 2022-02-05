@@ -15,17 +15,38 @@ import React from "react";
 
 type MuiIcon = OverridableComponent<SvgIconTypeMap> & {muiName: string};
 
+/**
+ * A action that can be provided in the sidebar
+ */
 export interface SidebarAction {
+    /**
+     * The icon that can be provided 
+     */
     icon?: MuiIcon;
+    /**
+     * The text that is displayed in the option
+     */
     text: string;
+    /**
+     * The action that is performed on click
+     */
     action: () => void;
 }
 
 interface PageLayoutProps {
+    /**
+     * All sidebar actions
+     */
     sidebarActions?: SidebarAction[];
+    /**
+     * The title of the page
+     */
     title: string;
 }
 
+/**
+ * Wrapper to wrap the page into a general purpose design
+ */
 const PageLayout = ({
     sidebarActions = [],
     title,

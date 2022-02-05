@@ -3,6 +3,10 @@ import {CurrentUserContext} from "../hooks/useCurrentUser";
 import {User} from "../types/Models/User";
 import useApiService from "../hooks/useApiService";
 
+/**
+ * wrapping component that provides multiple contexts 
+ * for handling app scoped states.
+ */
 const DataProvider = ({children}: PropsWithChildren<any>) => {
     
     const apiService = useApiService();

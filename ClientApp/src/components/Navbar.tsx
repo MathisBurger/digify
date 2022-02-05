@@ -3,6 +3,9 @@ import useCurrentUser from "../hooks/useCurrentUser";
 import {UserRole} from "../types/Models/UserRole";
 
 
+/**
+ * The app navbar
+ */
 const Navbar = () => {
     
     const {user} = useCurrentUser();
