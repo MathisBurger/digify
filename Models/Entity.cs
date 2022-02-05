@@ -5,10 +5,16 @@ namespace digify.Models;
 
 public class Entity
 {
+    /// <summary>
+    /// The ID of the entity
+    /// </summary>
     [Key]
     [JsonPropertyName("id")]
     public Guid Id { get; set; }
     
+    /// <summary>
+    /// The creation date of the entity
+    /// </summary>
     [JsonPropertyName("created")]
     public DateTime Created { get; set; }
 
