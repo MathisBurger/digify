@@ -28,6 +28,7 @@ public class UserController : AuthorizedControllerBase
     public ActionResult<User> Me() => Ok(AuthorizedUser);
 
     [HttpGet("/user/create")]
+    [TypeFilter(typeof(RequiresAuthorization))]
     public async Task<ActionResult<User>> CreateUser([FromBody] CreateUser request)
     {
         if (!Authorization.IsGranted(AuthorizedUser, UserVoter.CREATE_USER, new UserVoter()))

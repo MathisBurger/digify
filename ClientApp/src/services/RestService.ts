@@ -28,7 +28,8 @@ export default class RestService {
             credentials: process.env.NODE_ENV === "production" ? "same-origin" : "include"
         });
         if (fetchResult.status === 401) {
-            //window.location.replace("/login");
+            if (window.location.pathname === "/login") return {} as any;
+            window.location.replace("/login");
         }
         if (fetchResult.status !== 200 && fetchResult.status !== 204) {
             // Parse to generic error response
