@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace digify.Controllers;
 
+/// <summary>
+/// Handles user specific requests
+/// </summary>
 [ApiController]
 public class UserController : AuthorizedControllerBase
 {
@@ -23,10 +26,17 @@ public class UserController : AuthorizedControllerBase
     }
 
 
+    /// <summary>
+    /// Returns the current logged in user
+    /// </summary>
     [HttpGet("/user/me")]
     [TypeFilter(typeof(RequiresAuthorization))]
     public ActionResult<User> Me() => Ok(AuthorizedUser);
 
+    /// <summary>
+    /// Creates a new user.
+    /// </summary>
+    /// <param name="request">The user data of the new user</param>
     [HttpPost("/user/create")]
     [TypeFilter(typeof(RequiresAuthorization))]
     public async Task<ActionResult<User>> CreateUser([FromBody] CreateUser request)
@@ -45,6 +55,9 @@ public class UserController : AuthorizedControllerBase
         return Ok(user);
     }
 
+    /// <summary>
+    /// Fetches all users.
+    /// </summary>
     [HttpGet("/user/allUsers")]
     [TypeFilter(typeof(RequiresAuthorization))]
     public ActionResult<List<User>> AllUsers()

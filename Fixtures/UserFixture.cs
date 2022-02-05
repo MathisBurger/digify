@@ -5,6 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace digify.Fixtures;
 
+/// <summary>
+/// UserFixture that is used for creating
+/// initial users.
+/// </summary>
 public class UserFixture : IFixture
 {
     private readonly IContext db;
@@ -19,6 +23,7 @@ public class UserFixture : IFixture
         hasher = _hasher;
     }
 
+    /// <inheritdoc cref="IFixture" />
     public async Task Load()
     {
         var adminUser = new User();
@@ -29,6 +34,7 @@ public class UserFixture : IFixture
         await db.SaveChangesAsync();
     }
 
+    /// <inheritdoc cref="IFixture" />
     public async Task<bool> NotExists() =>
         (await db.Users.Where(u => u.Username == ADMIN_USERNAME).FirstOrDefaultAsync()) == null;
 

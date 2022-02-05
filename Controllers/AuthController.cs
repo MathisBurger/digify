@@ -9,6 +9,9 @@ using Microsoft.EntityFrameworkCore;
 namespace digify.Controllers;
 
 
+/// <summary>
+/// Handles auth specific requests
+/// </summary>
 [ApiController]
 public class AuthController : ControllerBase
 {
@@ -24,6 +27,12 @@ public class AuthController : ControllerBase
         auth = _auth;
         useSecureCookies = _config.GetValue("Authorization:UseSecureCookies", false);
     }
+    
+    /// <summary>
+    /// Logs in a user
+    /// </summary>
+    /// <param name="creds">The login credentials</param>
+    /// <returns>The http response that indicates the login status</returns>
     [HttpPost("/auth/login")]
     public async Task<ActionResult> Login([FromBody] AuthCredentials creds)
     {
