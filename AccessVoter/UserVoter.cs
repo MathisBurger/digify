@@ -2,6 +2,7 @@
 
 namespace digify.AccessVoter;
 
+
 public class UserVoter : IVoter
 {
     public const string CREATE_USER = "CREATE_USER";
@@ -28,6 +29,6 @@ public class UserVoter : IVoter
 
     private bool UserCanCreateUser()
     {
-        return ActionUser.Roles.Contains(User.ROLE_ADMIN);
+        return ActionUser.Roles.Contains(UserRoles.ADMIN);
     }
 }
