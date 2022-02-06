@@ -5,6 +5,7 @@ import DashboardPage from "./pages/DashboardPage";
 import DataProvider from "./components/DataProvider";
 import UsersPage from "./pages/UsersPage";
 import Snackbar from "./components/Snackbar";
+import ClassesPage from "./pages/ClassesPage";
 
 export default class App extends Component {
     static displayName = App.name;
@@ -19,6 +20,7 @@ export default class App extends Component {
                                 <Route path="/login" component={LoginPage} />
                                 <Route path="/dashboard" component={DashboardPage} />
                                 <Route path="/user-management" component={UsersPage} />
+                                <Route path="/classes" component={ClassesPage} />
                             </Switch>
                         </BrowserRouter>
                     </Snackbar>

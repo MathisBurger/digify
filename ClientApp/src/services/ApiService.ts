@@ -43,4 +43,11 @@ export default class APIService extends RestService {
     public async createUser(user: RequestUser): Promise<User> {
         return await this.post<User>(`${ORIGIN}/user/create`, JSON.stringify(user));
     }
+
+    /**
+     * Fetches all classes.
+     */
+    public async getAllClasses(): Promise<any[]> {
+        return await this.get<any[]>(`${ORIGIN}/class/getAllClasses`);
+    }
 }

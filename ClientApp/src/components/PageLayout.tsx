@@ -56,7 +56,7 @@ const PageLayout = ({
     return (
         <>
             <Navbar />
-            <Grid container direction="row" spacing={2} alignItems="center" minHeight="80vh">
+            <Grid container direction="row" spacing={2} alignItems="center" minHeight="80vh" justifyContent="center">
                 {sidebarActions.length > 0 ? (
                     <Grid item xs={2}>
                             <Toolbar />

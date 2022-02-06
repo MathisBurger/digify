@@ -30,6 +30,14 @@ const Navbar = () => {
                     >
                         Home
                     </Link>
+                    <Link
+                        variant="button"
+                        color="text.primary"
+                        href="/classes"
+                        sx={{ my: 1, mx: 1.5 }}
+                    >
+                        Classes
+                    </Link>
                     {user?.roles.includes(UserRole.ADMIN) ? (
                         <Link
                             variant="button"
