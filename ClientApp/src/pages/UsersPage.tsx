@@ -21,12 +21,18 @@ const UsersPage = () => {
         {
             icon: List,
             text: "List",
-            action: () => setPage(Pages.ListPage)
+            action: () => {
+                setPage(Pages.ListPage);
+                setTitle("List");
+            }
         },
         {
             icon: Add,
             text: "Create",
-            action: () => setPage(Pages.CreatePage)
+            action: () => {
+                setPage(Pages.CreatePage);
+                setTitle("Create");
+            }
         }
     ];
     
