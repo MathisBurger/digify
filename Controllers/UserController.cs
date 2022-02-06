@@ -36,7 +36,6 @@ public class UserController : AuthorizedControllerBase
     /// <summary>
     /// Creates a new user.
     /// </summary>
-    /// <param name="request">The user data of the new user</param>
     [HttpPost("/user/create")]
     [TypeFilter(typeof(RequiresAuthorization))]
     public async Task<ActionResult<User>> CreateUser([FromBody] CreateUser request)

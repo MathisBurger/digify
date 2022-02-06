@@ -1,5 +1,6 @@
 import RestService from "./RestService";
 import {RequestUser, User} from "../types/Models/User";
+import {RequestClass} from "../types/Models/Class";
 
 const ORIGIN = process.env.NODE_ENV === "production" ? '/api' : 'https://localhost:5001';
 
@@ -49,5 +50,14 @@ export default class APIService extends RestService {
      */
     public async getAllClasses(): Promise<any[]> {
         return await this.get<any[]>(`${ORIGIN}/class/getAllClasses`);
+    }
+
+    /**
+     * Creates a new class.
+     *
+     * @param newClass The class that should be created
+     */
+    public async createClass(newClass: RequestClass): Promise<any> {
+        return await this.post<any>(`${ORIGIN}/class/createClass`, JSON.stringify(newClass));
     }
 }

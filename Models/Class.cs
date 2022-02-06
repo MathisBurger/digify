@@ -1,4 +1,6 @@
-﻿namespace digify.Models;
+﻿using System.Collections.ObjectModel;
+
+namespace digify.Models;
 
 public class Class : Entity
 {
@@ -14,4 +16,10 @@ public class Class : Entity
     /// All students of the class
     /// </summary>
     public ICollection<User> Students { get; set; }
+
+    public Class()
+    {
+        Teachers = new Collection<User>();
+        Students = new Collection<User>();
+    }
 }

@@ -15,6 +15,11 @@ public class ClassVoter : IVoter
     public const string CAN_VIEW = "CAN_VIEW";
     
     /// <summary>
+    /// if a user can create a <see cref="Class" />
+    /// </summary>
+    public const string CAN_CREATE = "CAN_CREATE";
+    
+    /// <summary>
     /// The <see cref="User"/> that performs the
     /// action that should be validated
     /// </summary>
@@ -30,9 +35,9 @@ public class ClassVoter : IVoter
     /// The class that is referenced and is used for the data
     /// validation.
     /// </summary>
-    private Class RelationClass { get; set; }
+    private Class? RelationClass { get; set; }
 
-    public ClassVoter(Class relationClass, IContext db)
+    public ClassVoter(Class? relationClass, IContext db)
     {
         RelationClass = relationClass;
         DatabaseRepository = db;
@@ -51,6 +56,8 @@ public class ClassVoter : IVoter
         {
             case CAN_VIEW:
                 return UserCanViewClass();
+            case CAN_CREATE:
+                return UserCanCreateClass();
             default:
                 return false;
         }
@@ -66,6 +73,15 @@ public class ClassVoter : IVoter
                 .Where(
                     c => c.Teachers.Contains(ActionUser)
                     ).FirstOrDefault() != null
-               || DatabaseRepository.Users.Where(u => u.schoolClass != null && u.schoolClass.Id == RelationClass.Id).FirstOrDefault() != null;
+               || DatabaseRepository.Users.Where(u => u.schoolClass != null && u.schoolClass.Id == (RelationClass!).Id).FirstOrDefault() != null;
+    }
+
+    /// <summary>
+    /// Checks if a user is allowed to create a class
+    /// </summary>
+    /// <returns>If the user can create a class</returns>
+    private bool UserCanCreateClass()
+    {
+        return ActionUser.Roles.Contains(UserRoles.ADMIN);
     }
 }

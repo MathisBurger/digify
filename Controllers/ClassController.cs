@@ -1,9 +1,11 @@
 ﻿using digify.AccessVoter;
 using digify.Filters;
 using digify.Models;
+using digify.Models.Requests;
 using digify.Modules;
 using digify.Shared;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace digify.Controllers;
 
@@ -41,6 +43,36 @@ public class ClassController : AuthorizedControllerBase
         }
 
         return Db.Classes.Where(c => c.Students.Contains(AuthorizedUser)).ToList();
+    }
+
+    /// <summary>
+    /// Creates a new class.
+    /// </summary>
+    [HttpPost("/class/createClass")]
+    [TypeFilter(typeof(RequiresAuthorization))]
+    public async Task<ActionResult<Class>> CreateClass([FromBody] CreateClass request)
+    {
+        if (!Authorization.IsGranted(AuthorizedUser, ClassVoter.CAN_CREATE, new ClassVoter(null, Db)))
+        {
+            return Unauthorized();
+        }
+        var newClass = new Class();
+        newClass.Name = request.Name;
+        foreach (var studentId in request.StudentsIDs)
+        {
+            var student = await Db.Users.Where(u => u.Id.ToString() == studentId).FirstOrDefaultAsync();
+            if (student != null) newClass.Students.Add(student);
+        }
+
+        foreach (var teacherId in request.TeacherIDs)
+        {
+            var teacher = await Db.Users.Where(u => u.Id.ToString() == teacherId).FirstOrDefaultAsync();
+            if (teacher != null) newClass.Teachers.Add(teacher);
+        }
+
+        Db.Classes.Add(newClass);
+        await Db.SaveChangesAsync();
+        return Ok(newClass);
     }
     
 }
