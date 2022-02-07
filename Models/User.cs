@@ -24,11 +24,12 @@ public class User: Entity
     /// The class the user is assigned to.
     /// NOTE: Is null if the user is teacher or admin
     /// </summary>
-    public Class? schoolClass { get; set; }
+    public Guid? SchoolClassId { get; set; }
+    public Class? SchoolClass { get; set; }
     
     /// <summary>
     /// All classes of a user.
     /// NOTE: Only teachers are having assigned classes.
     /// </summary>
-    public ICollection<Class> classes { get; set; }
+    public IList<TeacherClass> Classes { get; set; }
 }

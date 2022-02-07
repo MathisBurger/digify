@@ -16,7 +16,33 @@ const ClassesList = () => {
     }, []);
     
     const columns: GridColDef[] = [
-        
+        {
+            field: 'name',
+            headerName: 'Name',
+            width: 100,
+            flex: 1
+        },
+        {
+            field: 'created',
+            headerName: 'Created',
+            type: 'dateTime',
+            flex: 1,
+            width: 300
+        },
+        {
+            field: 'students',
+            headerName: 'Students',
+            width: 100,
+            flex: 1,
+            renderCell: ({value}) => `${value ? value.length : 0}`
+        },
+        {
+            field: 'teachers',
+            headerName: 'Teachers',
+            width: 100,
+            flex: 1,
+            renderCell: ({value}) => `${value ? value.length : 0}`
+        }
     ];
     
     return (

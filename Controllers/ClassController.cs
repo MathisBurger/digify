@@ -34,12 +34,15 @@ public class ClassController : AuthorizedControllerBase
     {
         if (Authorization.IsGranted(AuthorizedUser, UserRoles.ADMIN, new UserVoter()))
         {
-            return Db.Classes.Select(c => c).ToList();
+            return Ok(Db.Classes.ToList());
         }
         // Check if user is teacher
-        if (AuthorizedUser.schoolClass == null)
+        if (AuthorizedUser.SchoolClass == null)
         {
-            return Db.Classes.Where(c => c.Teachers.Contains(AuthorizedUser)).ToList();
+            return Db.Classes
+                .Where(c => 
+                    c.Teachers.Where(t => t.TeacherId == AuthorizedUser.Id).FirstOrDefault() != null
+                    ).ToList();
         }
 
         return Db.Classes.Where(c => c.Students.Contains(AuthorizedUser)).ToList();
@@ -61,16 +64,26 @@ public class ClassController : AuthorizedControllerBase
         foreach (var studentId in request.StudentsIDs)
         {
             var student = await Db.Users.Where(u => u.Id.ToString() == studentId).FirstOrDefaultAsync();
-            if (student != null) newClass.Students.Add(student);
+            if (student != null)
+            {
+                student.SchoolClassId = newClass.Id;
+                Db.Update(student);
+            }
         }
 
         foreach (var teacherId in request.TeacherIDs)
         {
             var teacher = await Db.Users.Where(u => u.Id.ToString() == teacherId).FirstOrDefaultAsync();
-            if (teacher != null) newClass.Teachers.Add(teacher);
+            if (teacher == null)
+            {
+                var teacherClass = new TeacherClass();
+                teacherClass.ClassId = newClass.Id;
+                teacherClass.TeacherId = Guid.Parse(teacherId);
+                Db.Add(teacherClass);
+            }
         }
 
-        Db.Classes.Add(newClass);
+        Db.Add(newClass);
         await Db.SaveChangesAsync();
         return Ok(newClass);
     }

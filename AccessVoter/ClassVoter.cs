@@ -70,10 +70,12 @@ public class ClassVoter : IVoter
     private bool UserCanViewClass()
     {
         return DatabaseRepository.Classes
-                .Where(
-                    c => c.Teachers.Contains(ActionUser)
-                    ).FirstOrDefault() != null
-               || DatabaseRepository.Users.Where(u => u.schoolClass != null && u.schoolClass.Id == (RelationClass!).Id).FirstOrDefault() != null;
+                   .Where(c => c.Students.Where(s => s.Id == ActionUser.Id).FirstOrDefault() != null)
+                   .FirstOrDefault() != null
+               || DatabaseRepository.Classes
+                   .Where(c =>
+                       c.Teachers.Where(t => t.TeacherId == ActionUser.Id).FirstOrDefault() != null
+                   ).FirstOrDefault() != null;
     }
 
     /// <summary>

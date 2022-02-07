@@ -10,6 +10,7 @@ public interface IContext : IDisposable
 {
     DbSet<User> Users { get; set; }
     DbSet<Class> Classes { get; set; }
+    DbSet<TeacherClass> TeacherClasses { get; set; }
 
     DatabaseFacade Database { get; }
 

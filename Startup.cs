@@ -1,4 +1,5 @@
-﻿using digify.Modules;
+﻿using System.Text.Json.Serialization;
+using digify.Modules;
 using digify.Shared;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,6 +36,8 @@ public class Startup
             provider.GetService<ILogger<FixtureLoader>>()!,
             provider.GetService<IPasswordHasher>()!
             ));
+        services.AddControllers().AddJsonOptions(x =>
+            x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
     }
 
     /// <summary>

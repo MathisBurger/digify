@@ -12,8 +12,8 @@ using digify.Shared;
 namespace digify.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20220205224907_addedClass")]
-    partial class addedClass
+    [Migration("20220207113448_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,21 +23,6 @@ namespace digify.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("ClassUser", b =>
-                {
-                    b.Property<Guid>("TeachersId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("classesId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("TeachersId", "classesId");
-
-                    b.HasIndex("classesId");
-
-                    b.ToTable("ClassUser");
-                });
 
             modelBuilder.Entity("digify.Models.Class", b =>
                 {
@@ -57,6 +42,21 @@ namespace digify.Migrations
                     b.ToTable("Classes");
                 });
 
+            modelBuilder.Entity("digify.Models.TeacherClass", b =>
+                {
+                    b.Property<Guid>("TeacherId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ClassId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("TeacherId", "ClassId");
+
+                    b.HasIndex("ClassId");
+
+                    b.ToTable("TeacherClasses");
+                });
+
             modelBuilder.Entity("digify.Models.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -74,47 +74,60 @@ namespace digify.Migrations
                         .IsRequired()
                         .HasColumnType("text[]");
 
+                    b.Property<Guid>("SchoolClassId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("schoolClassId")
-                        .HasColumnType("uuid");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("schoolClassId");
+                    b.HasIndex("SchoolClassId");
 
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("ClassUser", b =>
+            modelBuilder.Entity("digify.Models.TeacherClass", b =>
                 {
-                    b.HasOne("digify.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("TeachersId")
+                    b.HasOne("digify.Models.Class", "Class")
+                        .WithMany("Teachers")
+                        .HasForeignKey("ClassId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("digify.Models.Class", null)
-                        .WithMany()
-                        .HasForeignKey("classesId")
+                    b.HasOne("digify.Models.User", "Teacher")
+                        .WithMany("Classes")
+                        .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Class");
+
+                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("digify.Models.User", b =>
                 {
-                    b.HasOne("digify.Models.Class", "schoolClass")
+                    b.HasOne("digify.Models.Class", "SchoolClass")
                         .WithMany("Students")
-                        .HasForeignKey("schoolClassId");
+                        .HasForeignKey("SchoolClassId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("schoolClass");
+                    b.Navigation("SchoolClass");
                 });
 
             modelBuilder.Entity("digify.Models.Class", b =>
                 {
                     b.Navigation("Students");
+
+                    b.Navigation("Teachers");
+                });
+
+            modelBuilder.Entity("digify.Models.User", b =>
+                {
+                    b.Navigation("Classes");
                 });
 #pragma warning restore 612, 618
         }
