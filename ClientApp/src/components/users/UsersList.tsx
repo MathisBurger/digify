@@ -1,10 +1,11 @@
 ﻿import {useEffect, useState} from "react";
 import {User} from "../../types/Models/User";
 import useApiService from "../../hooks/useApiService";
-import {DataGrid, GridCellParams, GridColDef, GridRenderCellParams} from "@mui/x-data-grid";
+import {DataGrid, GridCellParams, GridColDef, GridRenderCellParams, GridRowModel} from "@mui/x-data-grid";
 import {UserRole} from "../../types/Models/UserRole";
 import {Chip, Grid} from "@mui/material";
 import DataList from "../DataList/DataList";
+import {Remove} from "@mui/icons-material";
 
 /**
  * A list of all users that are existing in the system
@@ -49,7 +50,18 @@ const UsersList = () => {
     ];
     
     return (
-        <DataList columns={columns} rows={users} />
+        <DataList 
+            columns={columns}
+            rows={users}
+            singleActions={[
+                {
+                    icon: Remove,
+                    onClick: async (row: GridRowModel) => {
+                        await apiService.deleteUser(row.id);
+                    }
+                }
+            ]}
+        />
     );
 }
 

@@ -69,4 +69,28 @@ public class UserController : AuthorizedControllerBase
         var users = Db.Users.Select(x => x).ToList();
         return Ok(users);
     }
+
+    /// <summary>
+    /// Deletes a user from the system
+    /// </summary>
+    /// <param name="id">The ID of the user that should be deleted</param>
+    [HttpDelete("/user/delete/{id}")]
+    [TypeFilter(typeof(RequiresAuthorization))]
+    public async Task<ActionResult> DeleteUser([FromRoute] Guid id)
+    {
+        if (!Authorization.IsGranted(AuthorizedUser, UserVoter.DELETE_USER, new UserVoter()))
+        {
+            return Unauthorized();
+        }
+
+        var user = await Db.Users.FindAsync(id);
+        if (null == user)
+        {
+            return BadRequest();
+        }
+
+        Db.Remove(user);
+        await Db.SaveChangesAsync();
+        return Ok();
+    }
 }

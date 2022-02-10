@@ -12,10 +12,16 @@ public class UserVoter : IVoter
     /// If a user can create a new user
     /// </summary>
     public const string CREATE_USER = "CREATE_USER";
+    
     /// <summary>
     /// If a user can view all users
     /// </summary>
     public const string ALL_USERS = "ALL_USERS";
+
+    /// <summary>
+    /// If a user can delete a user
+    /// </summary>
+    public const string DELETE_USER = "DELETE_USER";
 
     /// <summary>
     /// The <see cref="User"/> that performs the
@@ -36,6 +42,7 @@ public class UserVoter : IVoter
         {
             case ALL_USERS:
             case CREATE_USER:
+            case DELETE_USER:    
                 return UserCanCreateUser();
             default:
                 return false;

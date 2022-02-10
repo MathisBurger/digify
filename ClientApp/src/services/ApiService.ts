@@ -69,4 +69,13 @@ export default class APIService extends RestService {
     public async deleteClass(id: string): Promise<any> {
         return await this.delete<any>(`${ORIGIN}/class/deleteClass/${id}`);
     }
+
+    /**
+     * Deletes a user from the system
+     * 
+     * @param id The ID of the user that should be deleted
+     */
+    public async deleteUser(id: string): Promise<any> {
+        return await this.delete<any>(`${ORIGIN}/user/delete/${id}`);
+    }
 }
