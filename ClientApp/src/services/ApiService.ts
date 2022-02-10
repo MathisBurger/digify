@@ -60,4 +60,13 @@ export default class APIService extends RestService {
     public async createClass(newClass: RequestClass): Promise<Class> {
         return await this.post<Class>(`${ORIGIN}/class/createClass`, JSON.stringify(newClass));
     }
+
+    /**
+     * Deletes a class from the system
+     * 
+     * @param id The ID of the class that should be deleted
+     */
+    public async deleteClass(id: string): Promise<any> {
+        return await this.delete<any>(`${ORIGIN}/class/deleteClass/${id}`);
+    }
 }

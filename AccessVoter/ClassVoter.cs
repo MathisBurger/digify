@@ -10,7 +10,7 @@ namespace digify.AccessVoter;
 public class ClassVoter : IVoter
 {
     /// <summary>
-    /// If a user can view a <see cref="Class"/>
+    /// If a user can view a <see cref="Class" />
     /// </summary>
     public const string CAN_VIEW = "CAN_VIEW";
     
@@ -18,6 +18,11 @@ public class ClassVoter : IVoter
     /// if a user can create a <see cref="Class" />
     /// </summary>
     public const string CAN_CREATE = "CAN_CREATE";
+
+    /// <summary>
+    /// If a user can delete a <see cref="Class" />
+    /// </summary>
+    public const string CAN_DELETE = "CAN_DELETE";
     
     /// <summary>
     /// The <see cref="User"/> that performs the
@@ -57,7 +62,8 @@ public class ClassVoter : IVoter
             case CAN_VIEW:
                 return UserCanViewClass();
             case CAN_CREATE:
-                return UserCanCreateClass();
+            case CAN_DELETE:    
+                return UserCanCreateOrDeleteClass();
             default:
                 return false;
         }
@@ -82,7 +88,7 @@ public class ClassVoter : IVoter
     /// Checks if a user is allowed to create a class
     /// </summary>
     /// <returns>If the user can create a class</returns>
-    private bool UserCanCreateClass()
+    private bool UserCanCreateOrDeleteClass()
     {
         return ActionUser.Roles.Contains(UserRoles.ADMIN);
     }

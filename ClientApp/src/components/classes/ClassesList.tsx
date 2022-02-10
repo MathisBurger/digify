@@ -1,7 +1,8 @@
 import useApiService from "../../hooks/useApiService";
-import {GridColDef} from "@mui/x-data-grid";
+import {GridColDef, GridRowModel} from "@mui/x-data-grid";
 import DataList from "../DataList/DataList";
 import {useEffect, useState} from "react";
+import {Remove} from "@mui/icons-material";
 
 
 const ClassesList = () => {
@@ -46,7 +47,18 @@ const ClassesList = () => {
     ];
     
     return (
-        <DataList columns={columns} rows={classes} />
+        <DataList 
+            columns={columns} 
+            rows={classes}
+            singleActions={[
+                {
+                    icon: Remove,
+                    onClick: async (row: GridRowModel) => {
+                        await apiService.deleteClass(row.id);
+                    }
+                }
+            ]}
+        />
     )
 }
 

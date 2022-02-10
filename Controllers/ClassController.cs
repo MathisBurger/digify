@@ -92,5 +92,40 @@ public class ClassController : AuthorizedControllerBase
         Logger.LogInformation("Created class");
         return Ok(newClass);
     }
+
+    /// <summary>
+    /// Deletes a class from the system
+    /// </summary>
+    /// <param name="id">The ID of the class that should be deleted</param>
+    [HttpDelete("/class/deleteClass/{id}")]
+    [TypeFilter(typeof(RequiresAuthorization))]
+    public async Task<ActionResult> DeleteClass([FromRoute] Guid id)
+    {
+        if (!Authorization.IsGranted(AuthorizedUser, ClassVoter.CAN_DELETE, new ClassVoter(null, Db)))
+        {
+            return Unauthorized();
+        }
+
+        var deleteableClass = await Db.Classes.FindAsync(id);
+        if (deleteableClass == null)
+        {
+            return BadRequest();
+        }
+        foreach (var student in Db.Users.Where(u => u.SchoolClassId == deleteableClass.Id).ToArray())
+        {
+            student.SchoolClassId = null;
+            student.SchoolClass = null;
+            Db.Update(student);
+        }
+
+        foreach (var teacherClass in Db.TeacherClasses.Where(t => t.ClassId == deleteableClass.Id).ToArray())
+        {
+            Db.Remove(teacherClass);
+        }
+
+        Db.Remove(deleteableClass);
+        await Db.SaveChangesAsync();
+        return Ok();
+    }
     
 }

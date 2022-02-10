@@ -13,7 +13,7 @@ import Navbar from "./Navbar";
 import {OverridableComponent} from "@mui/material/OverridableComponent";
 import React from "react";
 
-type MuiIcon = OverridableComponent<SvgIconTypeMap> & {muiName: string};
+export type MuiIcon = OverridableComponent<SvgIconTypeMap> & {muiName: string};
 
 /**
  * A action that can be provided in the sidebar
