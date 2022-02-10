@@ -75,13 +75,9 @@ public class ClassVoter : IVoter
     /// <returns>If the user can view the given class</returns>
     private bool UserCanViewClass()
     {
-        return DatabaseRepository.Classes
-                   .Where(c => c.Students.Where(s => s.Id == ActionUser.Id).FirstOrDefault() != null)
-                   .FirstOrDefault() != null
-               || DatabaseRepository.Classes
-                   .Where(c =>
-                       c.Teachers.Where(t => t.TeacherId == ActionUser.Id).FirstOrDefault() != null
-                   ).FirstOrDefault() != null;
+        return DatabaseRepository.Classes.Where(
+            c => c.Teachers.Contains(ActionUser) || c.Students.Contains(ActionUser)
+        ).FirstOrDefault() != null;
     }
 
     /// <summary>

@@ -78,13 +78,9 @@ public class ClassController : AuthorizedControllerBase
         foreach (var teacherId in request.TeacherIDs)
         {
             var teacher = await Db.Users.FindAsync(Guid.Parse(teacherId));
-            if (teacher != null)
-            {
-                var teacherClass = new TeacherClass();
-                teacherClass.Class = newClass;
-                teacherClass.Teacher = teacher;
-                Db.Add(teacherClass);
-            }
+            if (teacher == null) continue;
+            teacher.Classes.Add(newClass);
+            Db.Update(teacher);
         }
 
         Db.Add(newClass);
@@ -110,17 +106,6 @@ public class ClassController : AuthorizedControllerBase
         if (deleteableClass == null)
         {
             return BadRequest();
-        }
-        foreach (var student in Db.Users.Where(u => u.SchoolClassId == deleteableClass.Id).ToArray())
-        {
-            student.SchoolClassId = null;
-            student.SchoolClass = null;
-            Db.Update(student);
-        }
-
-        foreach (var teacherClass in Db.TeacherClasses.Where(t => t.ClassId == deleteableClass.Id).ToArray())
-        {
-            Db.Remove(teacherClass);
         }
 
         Db.Remove(deleteableClass);

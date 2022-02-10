@@ -70,7 +70,6 @@ public class Startup
         using (var db = scope.ServiceProvider.GetService<IContext>()!)
         {
             var fixtureLoader = scope.ServiceProvider.GetService<IFixtureLoader>()!;
-            db.Database.Migrate();
             fixtureLoader.Load(db).Wait();
         }
     }

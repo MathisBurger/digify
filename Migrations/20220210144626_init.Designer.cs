@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using digify.Shared;
@@ -11,9 +12,10 @@ using digify.Shared;
 namespace digify.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20220210144626_init")]
+    partial class init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,15 +26,10 @@ namespace digify.Migrations
 
             modelBuilder.Entity("ClassUser", b =>
                 {
-                    b.Property<Guid>("ClassesId")
+                    b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("TeachersId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("ClassesId", "TeachersId");
-
-                    b.HasIndex("TeachersId");
+                    b.HasKey("Id");
 
                     b.ToTable("ClassUser");
                 });
@@ -106,7 +103,6 @@ namespace digify.Migrations
             modelBuilder.Entity("digify.Models.User", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("Created")
@@ -120,16 +116,11 @@ namespace digify.Migrations
                         .IsRequired()
                         .HasColumnType("text[]");
 
-                    b.Property<Guid?>("SchoolClassId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SchoolClassId");
 
                     b.ToTable("Users");
                 });
@@ -138,13 +129,13 @@ namespace digify.Migrations
                 {
                     b.HasOne("digify.Models.Class", null)
                         .WithMany()
-                        .HasForeignKey("ClassesId")
+                        .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("digify.Models.User", null)
                         .WithMany()
-                        .HasForeignKey("TeachersId")
+                        .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -175,7 +166,9 @@ namespace digify.Migrations
                 {
                     b.HasOne("digify.Models.Class", "SchoolClass")
                         .WithMany("Students")
-                        .HasForeignKey("SchoolClassId");
+                        .HasForeignKey("Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("SchoolClass");
                 });
@@ -192,7 +185,8 @@ namespace digify.Migrations
 
             modelBuilder.Entity("digify.Models.User", b =>
                 {
-                    b.Navigation("Timetable");
+                    b.Navigation("Timetable")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace digify.Models;
 
@@ -12,7 +13,7 @@ public class User: Entity
     /// <summary>
     /// The hashed password of the user
     /// </summary>
-    [JsonIgnore]
+    [System.Text.Json.Serialization.JsonIgnore]
     public string Password { get; set; }
     
     /// <summary>
@@ -24,12 +25,24 @@ public class User: Entity
     /// The class the user is assigned to.
     /// NOTE: Is null if the user is teacher or admin
     /// </summary>
-    public Guid? SchoolClassId { get; set; }
+    [InverseProperty("Students")]
     public Class? SchoolClass { get; set; }
     
     /// <summary>
     /// All classes of a user.
     /// NOTE: Only teachers are having assigned classes.
     /// </summary>
-    public IList<TeacherClass> Classes { get; set; }
+    [InverseProperty("Teachers")]
+    public IList<Class> Classes { get; set; }
+    
+    public Timetable? Timetable { get; set; }
+    
+
+    public User()
+    {
+        SchoolClass = null;
+        Timetable = null;
+        Classes = new List<Class>();
+        
+    }
 }

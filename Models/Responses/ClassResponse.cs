@@ -19,8 +19,8 @@ public class ClassResponse
         foreach (var cClass in classes)
         {
             var fetchedClass = await Db.Classes.FindAsync(cClass.Id);
-            fetchedClass!.Students = await Db.Users.Where(u => u.SchoolClassId == cClass.Id).ToListAsync();
-            fetchedClass!.Teachers = await Db.TeacherClasses.Where(t => t.ClassId == cClass.Id).ToListAsync();
+            //fetchedClass!.Students = await Db.Users.Where(u => u.SchoolClassId == cClass.Id).ToListAsync();
+            //fetchedClass!.Teachers = await Db.Users.Where(t => t. == cClass.Id).ToListAsync();
             newList.Add(fetchedClass!);
         }
 

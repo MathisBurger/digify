@@ -30,7 +30,7 @@ public class UserFixture : IFixture
         adminUser.Username = ADMIN_USERNAME;
         adminUser.Password = hasher.HashFromPassword(ADMIN_PASSWORD);
         adminUser.Roles = new string[] {UserRoles.ADMIN};
-        db.Users.Add(adminUser);
+        db.Add(adminUser);
         await db.SaveChangesAsync();
     }
 
