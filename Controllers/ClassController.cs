@@ -2,6 +2,7 @@
 using digify.Filters;
 using digify.Models;
 using digify.Models.Requests;
+using digify.Models.Responses;
 using digify.Modules;
 using digify.Shared;
 using Microsoft.AspNetCore.Mvc;
@@ -17,11 +18,13 @@ public class ClassController : AuthorizedControllerBase
 {
     private readonly IContext Db;
     private readonly IAuthorization Authorization;
+    private readonly ILogger<ClassController> Logger;
 
-    public ClassController(IContext _db, IAuthorization _auth)
+    public ClassController(IContext _db, IAuthorization _auth, ILogger<ClassController> logger)
     {
         Db = _db;
         Authorization = _auth;
+        Logger = logger;
     }
 
     /// <summary>
@@ -30,22 +33,23 @@ public class ClassController : AuthorizedControllerBase
     /// </summary>
     [HttpGet("/class/getAllClasses")]
     [TypeFilter(typeof(RequiresAuthorization))]
-    public ActionResult<List<Class>> GetAllClasses()
+    public async Task<ActionResult<List<Class>>> GetAllClasses()
     {
         if (Authorization.IsGranted(AuthorizedUser, UserRoles.ADMIN, new UserVoter()))
         {
-            return Ok(Db.Classes.ToList());
+            return Ok(await new ClassResponse(Db).ParseList(Db.Classes.ToList()));
         }
         // Check if user is teacher
         if (AuthorizedUser.SchoolClass == null)
         {
-            return Db.Classes
-                .Where(c => 
-                    c.Teachers.Where(t => t.TeacherId == AuthorizedUser.Id).FirstOrDefault() != null
-                    ).ToList();
+            return Ok(new List<Class>() {Db.Classes.ToArray()[0]});
         }
 
-        return Db.Classes.Where(c => c.Students.Contains(AuthorizedUser)).ToList();
+        return Ok(
+            await new ClassResponse(Db).ParseList(
+                Db.Classes.Where(c => c.Students.Contains(AuthorizedUser)).ToList()
+                )
+            );
     }
 
     /// <summary>
@@ -63,28 +67,29 @@ public class ClassController : AuthorizedControllerBase
         newClass.Name = request.Name;
         foreach (var studentId in request.StudentsIDs)
         {
-            var student = await Db.Users.Where(u => u.Id.ToString() == studentId).FirstOrDefaultAsync();
+            var student = await Db.Users.FindAsync(Guid.Parse(studentId));
             if (student != null)
             {
-                student.SchoolClassId = newClass.Id;
+                student.SchoolClass = newClass;
                 Db.Update(student);
             }
         }
 
         foreach (var teacherId in request.TeacherIDs)
         {
-            var teacher = await Db.Users.Where(u => u.Id.ToString() == teacherId).FirstOrDefaultAsync();
-            if (teacher == null)
+            var teacher = await Db.Users.FindAsync(Guid.Parse(teacherId));
+            if (teacher != null)
             {
                 var teacherClass = new TeacherClass();
-                teacherClass.ClassId = newClass.Id;
-                teacherClass.TeacherId = Guid.Parse(teacherId);
+                teacherClass.Class = newClass;
+                teacherClass.Teacher = teacher;
                 Db.Add(teacherClass);
             }
         }
 
         Db.Add(newClass);
         await Db.SaveChangesAsync();
+        Logger.LogInformation("Created class");
         return Ok(newClass);
     }
     
