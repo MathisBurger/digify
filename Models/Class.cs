@@ -21,4 +21,10 @@ public class Class : Entity
     /// </summary>
     [InverseProperty("Classes")]
     public ICollection<User> Teachers { get; set; }
+
+    public Class()
+    {
+        Students = new List<User>();
+        Teachers = new List<User>();
+    }
 }

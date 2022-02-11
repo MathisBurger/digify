@@ -175,7 +175,8 @@ namespace digify.Migrations
                 {
                     b.HasOne("digify.Models.Class", "SchoolClass")
                         .WithMany("Students")
-                        .HasForeignKey("SchoolClassId");
+                        .HasForeignKey("SchoolClassId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("SchoolClass");
                 });

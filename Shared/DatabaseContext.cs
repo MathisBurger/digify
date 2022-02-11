@@ -14,4 +14,13 @@ public class DatabaseContext : DbContext, IContext
 
     public DatabaseContext(DbContextOptions options) : base(options)
     { }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<User>()
+            .HasOne(u => u.SchoolClass)
+            .WithMany(c => c.Students)
+            .OnDelete(DeleteBehavior.SetNull);
+    }
 }

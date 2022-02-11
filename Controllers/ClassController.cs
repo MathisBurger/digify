@@ -67,7 +67,6 @@ public class ClassController : AuthorizedControllerBase
         newClass.Name = request.Name;
         Db.Classes.Attach(newClass);
         Db.Classes.Add(newClass);
-        newClass.Students = new List<User>();
         foreach (var studentId in request.StudentsIDs)
         {
             var student = await Db.Users.FindAsync(Guid.Parse(studentId));
@@ -78,8 +77,7 @@ public class ClassController : AuthorizedControllerBase
                 Db.Update(student);
             }
         }
-
-        newClass.Teachers = new List<User>();
+        
         foreach (var teacherId in request.TeacherIDs)
         {
             var teacher = await Db.Users.FindAsync(Guid.Parse(teacherId));
@@ -112,7 +110,7 @@ public class ClassController : AuthorizedControllerBase
         {
             return BadRequest();
         }
-
+        
         Db.Remove(deleteableClass);
         await Db.SaveChangesAsync();
         return Ok();
