@@ -42,7 +42,8 @@ public class ClassController : AuthorizedControllerBase
         // Check if user is teacher
         if (AuthorizedUser.SchoolClass == null)
         {
-            return Ok(new List<Class>() {Db.Classes.ToArray()[0]});
+            return Ok(await new ClassResponse(Db).ParseList(
+                new List<Class>() {Db.Classes.ToArray()[0]}));
         }
 
         return Ok(
@@ -50,6 +51,23 @@ public class ClassController : AuthorizedControllerBase
                 Db.Classes.Where(c => c.Students.Contains(AuthorizedUser)).ToList()
                 )
             );
+    }
+
+    /// <summary>
+    /// Fetches a specific class from the database
+    /// </summary>
+    /// <param name="id">The id of the class</param>
+    [HttpGet("/class/{id}")]
+    [TypeFilter(typeof(RequiresAuthorization))]
+    public async Task<ActionResult<Class>> GetClass([FromRoute] Guid id)
+    {
+        var c = await Db.Classes.FindAsync(id);
+        if (null == c)
+        {
+            return BadRequest();
+        }
+
+        return Ok(await new ClassResponse(Db).ParseSingle(c));
     }
 
     /// <summary>
