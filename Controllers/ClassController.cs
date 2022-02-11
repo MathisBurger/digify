@@ -65,25 +65,30 @@ public class ClassController : AuthorizedControllerBase
         }
         var newClass = new Class();
         newClass.Name = request.Name;
+        Db.Classes.Attach(newClass);
+        Db.Classes.Add(newClass);
+        newClass.Students = new List<User>();
         foreach (var studentId in request.StudentsIDs)
         {
             var student = await Db.Users.FindAsync(Guid.Parse(studentId));
             if (student != null)
             {
                 student.SchoolClass = newClass;
+                newClass.Students.Add(student);
                 Db.Update(student);
             }
         }
 
+        newClass.Teachers = new List<User>();
         foreach (var teacherId in request.TeacherIDs)
         {
             var teacher = await Db.Users.FindAsync(Guid.Parse(teacherId));
             if (teacher == null) continue;
             teacher.Classes.Add(newClass);
+            newClass.Teachers.Add(teacher);
             Db.Update(teacher);
         }
-
-        Db.Add(newClass);
+        
         await Db.SaveChangesAsync();
         Logger.LogInformation("Created class");
         return Ok(newClass);

@@ -20,7 +20,5 @@ public class Class : Entity
     /// All teachers of the class
     /// </summary>
     [InverseProperty("Classes")]
-    public IList<User> Teachers { get; set; }
-    
-    
+    public ICollection<User> Teachers { get; set; }
 }

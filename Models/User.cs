@@ -33,7 +33,7 @@ public class User: Entity
     /// NOTE: Only teachers are having assigned classes.
     /// </summary>
     [InverseProperty("Teachers")]
-    public IList<Class> Classes { get; set; }
+    public ICollection<Class> Classes { get; set; }
     
     public Timetable? Timetable { get; set; }
     
