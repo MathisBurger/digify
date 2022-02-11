@@ -27,6 +27,7 @@ public class Startup
         services.AddDbContext<IContext, DatabaseContext>(ctx =>
             ctx.UseNpgsql(Configuration.GetValue<string>("database:postgresConnectionString"))
         );
+        services.AddSwaggerGen();
         services.AddSingleton<IPasswordHasher, Argon2IdHasher>();
             services.AddSingleton<IAuthorization>((services) => jwtSigningKey == null
                 ? new JWTAuthorization()
@@ -53,6 +54,8 @@ public class Startup
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials());
+            app.UseSwagger();
+            app.UseSwaggerUI();
         }
 
         app.UseHttpsRedirection();
