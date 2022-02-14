@@ -18,6 +18,6 @@ public class TimeTableElement : Entity
     public string Room { get; set; }
     
     public string SubjectColor { get; set; }
-    
+    [InverseProperty("TableElements")]
     public Timetable Parent { get; set; }
 }

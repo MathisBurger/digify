@@ -36,6 +36,8 @@ public class User: Entity
     [InverseProperty("Teachers")]
     public ICollection<Class> Classes { get; set; }
     
+    [InverseProperty("OwningUser")]
+    [ForeignKey("Id")]
     public Timetable? Timetable { get; set; }
     
 
@@ -44,6 +46,5 @@ public class User: Entity
         SchoolClass = null;
         Timetable = null;
         Classes = new List<Class>();
-        
     }
 }

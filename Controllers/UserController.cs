@@ -46,9 +46,12 @@ public class UserController : AuthorizedControllerBase
         }
 
         var user = new User();
+        var timeTable = new Timetable();
         user.Username = request.Username;
         user.Password = Hasher.HashFromPassword(request.Password);
         user.Roles = request.Roles;
+        user.Timetable = timeTable;
+        Db.Timetables.Add(timeTable);
         Db.Users.Add(user);
         await Db.SaveChangesAsync();
         return Ok(user);

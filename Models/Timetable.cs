@@ -4,9 +4,14 @@ namespace digify.Models;
 
 public class Timetable : Entity
 {
-    [ForeignKey("Id")]
+    [InverseProperty("Parent")]
     public IList<TimeTableElement> TableElements { get; set; }
     
-    [ForeignKey("Id")]
+    [InverseProperty("Timetable")]
     public User OwningUser { get; set; }
+
+    public Timetable()
+    {
+        TableElements = new List<TimeTableElement>();
+    }
 }

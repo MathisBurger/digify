@@ -30,7 +30,10 @@ public class UserFixture : IFixture
         adminUser.Username = ADMIN_USERNAME;
         adminUser.Password = hasher.HashFromPassword(ADMIN_PASSWORD);
         adminUser.Roles = new string[] {UserRoles.ADMIN};
+        var timeTable = new Timetable();
+        adminUser.Timetable = timeTable;
         db.Add(adminUser);
+        db.Add(timeTable);
         await db.SaveChangesAsync();
     }
 
