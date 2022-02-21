@@ -1,6 +1,7 @@
 import RestService from "./RestService";
 import {RequestUser, User} from "../types/Models/User";
 import {Class, RequestClass} from "../types/Models/Class";
+import {Timetable} from "../types/Models/Timetable";
 
 const ORIGIN = process.env.NODE_ENV === "production" ? '/api' : 'https://localhost:5001';
 
@@ -77,5 +78,12 @@ export default class APIService extends RestService {
      */
     public async deleteUser(id: string): Promise<any> {
         return await this.delete<any>(`${ORIGIN}/user/delete/${id}`);
+    }
+
+    /**
+     * Gets the current timetable of the user
+     */
+    public async getTimetable(): Promise<Timetable> {
+        return await this.get<Timetable>(`${ORIGIN}/timetable/get`);
     }
 }

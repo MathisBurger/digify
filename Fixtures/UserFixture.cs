@@ -32,8 +32,8 @@ public class UserFixture : IFixture
         adminUser.Roles = new string[] {UserRoles.ADMIN};
         var timeTable = new Timetable();
         adminUser.Timetable = timeTable;
-        db.Add(adminUser);
-        db.Add(timeTable);
+        db.Users.Add(adminUser);
+        db.Timetables.Add(timeTable);
         await db.SaveChangesAsync();
     }
 

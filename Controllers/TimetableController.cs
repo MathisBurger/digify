@@ -1,9 +1,11 @@
 ﻿using digify.AccessVoter;
 using digify.Filters;
 using digify.Models;
+using digify.Models.Responses;
 using digify.Modules;
 using digify.Shared;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace digify.Controllers;
 
@@ -31,11 +33,13 @@ public class TimetableController : AuthorizedControllerBase
     /// <returns>The current timetable of the user</returns>
     [HttpGet("/timetable/get")]
     [TypeFilter(typeof(RequiresAuthorization))]
-    public ActionResult<Timetable> GetTimetable()
+    public async Task<ActionResult<Timetable>> GetTimetable()
     {
-        if (AuthorizedUser.Roles.Contains(UserRoles.STUDENT))
+        var user = (await Db.Users.FindAsync(AuthorizedUser.Id))!;
+        user.Timetable = (await Db.Timetables.Where(t => t.OwningUser.Id == user.Id).FirstOrDefaultAsync())!;
+        if (user.Roles.Contains(UserRoles.STUDENT))
         {
-            return Ok(AuthorizedUser.Timetable ?? new Timetable());
+            return Ok(await (new TimetableResponse(Db).FetchTimetable(user.Timetable!)));
         }
 
         return Unauthorized();

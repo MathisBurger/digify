@@ -37,7 +37,6 @@ public class User: Entity
     public ICollection<Class> Classes { get; set; }
     
     [InverseProperty("OwningUser")]
-    [ForeignKey("Id")]
     public Timetable? Timetable { get; set; }
     
 
