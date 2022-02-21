@@ -72,6 +72,7 @@ public class Startup
         using (var scope = app.ApplicationServices.CreateScope())
         using (var db = scope.ServiceProvider.GetService<IContext>()!)
         {
+            db.Database.Migrate();
             var fixtureLoader = scope.ServiceProvider.GetService<IFixtureLoader>()!;
             fixtureLoader.Load(db).Wait();
         }
