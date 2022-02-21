@@ -38,7 +38,7 @@ const Navbar = () => {
                     >
                         Classes
                     </Link>
-                    {user?.roles.includes(UserRole.ADMIN) ? (
+                    {user?.roles && user?.roles.includes(UserRole.ADMIN) ? (
                         <Link
                             variant="button"
                             color="text.primary"
@@ -50,7 +50,7 @@ const Navbar = () => {
                     ) : null}
                 </nav>
                 <Button href="/login" variant="outlined" sx={{ my: 1, mx: 1.5 }}>
-                    Login
+                    {user === null ? "Login" : user.username}
                 </Button>
             </Toolbar>
         </AppBar>
