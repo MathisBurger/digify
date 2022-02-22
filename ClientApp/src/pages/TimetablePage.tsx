@@ -1,7 +1,7 @@
 ﻿import PageLayout from "../components/PageLayout";
 import useApiService from "../hooks/useApiService";
 import {useEffect, useState} from "react";
-import {ChevronRight, ExpandMore} from "@mui/icons-material";
+import {ChevronRight, Edit, ExpandMore} from "@mui/icons-material";
 import {Timetable} from "../types/Models/Timetable";
 import {TreeView} from "@mui/lab";
 import {CircularProgress, Grid} from "@mui/material";
@@ -63,9 +63,35 @@ const TimetablePage = () => {
                                     {timetable?.table_elements.filter(e => e.day == day).map((element) => (
                                         <ModifiedTreeItem 
                                             nodeId={`${day}-${element.start_time}`}
-                                            label={element.subject}
-                                            color={element.subject_color}
-                                        />
+                                            label={
+                                            `${element.subject}`
+                                            }
+                                        >
+                                            <ModifiedTreeItem
+                                                nodeId={`${day}-${element.start_time}-color`}
+                                                label="Color"
+                                                whiteFont
+                                                color={element.subject_color}
+                                            />
+                                            <ModifiedTreeItem 
+                                                nodeId={`${day}-${element.start_time}-room`}
+                                                label={`Room: ${element.room} ${element.teacher}`} 
+                                            />
+                                            <ModifiedTreeItem
+                                                nodeId={`${day}-${element.start_time}-teacher`}
+                                                label={`Teacher: ${element.teacher}`}
+                                            />
+                                            <ModifiedTreeItem
+                                                nodeId={`${day}-${element.start_time}-date`}
+                                                label={`Time: ${new Date(element.start_time).getHours()}:${new Date(element.start_time).getMinutes()}
+                                            - ${new Date(element.end_time).getHours()}:${new Date(element.end_time).getMinutes()}`}
+                                            />
+                                            <ModifiedTreeItem
+                                                nodeId={`${day}-${element.start_time}-edit`}
+                                                label="Edit"
+                                                icon={<Edit />}
+                                            />
+                                        </ModifiedTreeItem>
                                     ))}
                                 </ModifiedTreeItem>
                             ))}
