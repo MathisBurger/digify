@@ -5,7 +5,8 @@ import {DataGrid, GridCellParams, GridColDef, GridRenderCellParams, GridRowModel
 import {UserRole} from "../../types/Models/UserRole";
 import {Chip, Grid} from "@mui/material";
 import DataList from "../DataList/DataList";
-import {Remove} from "@mui/icons-material";
+import {CalendarViewMonth, Remove} from "@mui/icons-material";
+import {useHistory} from "react-router-dom";
 
 /**
  * A list of all users that are existing in the system
@@ -14,6 +15,7 @@ const UsersList = () => {
     
     const [users, setUsers] = useState<User[]>([]);
     const apiService = useApiService();
+    const history = useHistory();
     
     useEffect(() => {
         const fetcher = async () => setUsers(await apiService.allUsers());
@@ -59,6 +61,11 @@ const UsersList = () => {
                     onClick: async (row: GridRowModel) => {
                         await apiService.deleteUser(row.id);
                     }
+                },
+                {
+                    icon: CalendarViewMonth,
+                    onClick: (row: GridRowModel) => 
+                        history.push(`/timetable?action=forUser&elementId=${row.id}`)
                 }
             ]}
         />

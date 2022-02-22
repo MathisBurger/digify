@@ -1,7 +1,7 @@
 import RestService from "./RestService";
 import {RequestUser, User} from "../types/Models/User";
 import {Class, RequestClass} from "../types/Models/Class";
-import {Timetable} from "../types/Models/Timetable";
+import {Timetable, TimeTableElement} from "../types/Models/Timetable";
 
 const ORIGIN = process.env.NODE_ENV === "production" ? '/api' : 'https://localhost:5001';
 
@@ -85,5 +85,31 @@ export default class APIService extends RestService {
      */
     public async getTimetable(): Promise<Timetable> {
         return await this.get<Timetable>(`${ORIGIN}/timetable/get`);
+    }
+
+    /**
+     * Gets a timetable by action.
+     * 
+     * @param userId The ID of the user 
+     * @param classId The ID of the class that should be used
+     */
+    public async actionGetTimetable(userId?: string, classId?: string): Promise<Timetable> {
+        let queryParam = '';
+        queryParam = userId ? 'user_id' : queryParam;
+        queryParam = classId ? 'class_id' : queryParam;
+        return await this.get<Timetable>(`${ORIGIN}/timetable/actionGet?${queryParam}=${userId ?? classId}`);
+    }
+
+    /**
+     * Updates the timetable of a user
+     * 
+     * @param userId The user thats timetable should be updated
+     * @param elements All elements of the timetable
+     */
+    public async updateTimetableForUser(userId: string, elements: TimeTableElement[]): Promise<Timetable> {
+        return await this.post<Timetable>(
+            `${ORIGIN}/timetable/update/forUser`, 
+            JSON.stringify({user_id: userId, request_table_elements: elements})
+        );
     }
 }

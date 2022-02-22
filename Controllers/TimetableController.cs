@@ -49,6 +49,35 @@ public class TimetableController : AuthorizedControllerBase
         return Unauthorized();
     }
 
+    [HttpGet("/timetable/actionGet")]
+    [TypeFilter(typeof(RequiresAuthorization))]
+    public async Task<ActionResult<Timetable>> GetTimetableForGroup(
+        [FromQuery(Name = "user_id")] Guid? userId,
+        [FromQuery(Name = "class_id")] Guid? classId
+        ) {
+        
+        if (!AuthorizedUser.Roles.Contains(UserRoles.ADMIN)) return Unauthorized();
+        
+        if (userId != null)
+        {
+            var user = await Db.Users.FindAsync(userId);
+            if (user == null) return BadRequest();
+            var timetable = await Db.Timetables.Where(t => t.OwningUser.Id == user.Id).FirstOrDefaultAsync();
+            return Ok(await new TimetableResponse(Db).FetchTimetable(timetable!));
+        }
+
+        if (classId != null)
+        {
+            var studentClass = await Db.Classes.FindAsync(classId);
+            if (studentClass == null) return BadRequest();
+            var student = (await Db.Users.FindAsync(studentClass.Students.First().Id))!;
+            var timetable = await Db.Timetables.Where(t => t.OwningUser.Id == student.Id).FirstOrDefaultAsync();
+            return Ok(await new TimetableResponse(Db).FetchTimetable(timetable!));
+        }
+
+        return BadRequest();
+    }
+
     [HttpPost("/timetable/create/forUser")]
     [TypeFilter(typeof(RequiresAuthorization))]
     public async Task<ActionResult<Timetable>> CreateTimetableForUser([FromBody] TimetableManagementRequest request)
@@ -96,6 +125,23 @@ public class TimetableController : AuthorizedControllerBase
                 await TimetableService.DeleteTimeTable(user.Timetable!.Id)
                 )
             );
+    }
+
+    [HttpPost("/timetable/update/forUser")]
+    [TypeFilter(typeof(RequiresAuthorization))]
+    public async Task<ActionResult<Timetable>> UpdateTimetableForUser([FromBody] TimetableManagementRequest request)
+    {
+        if (request.UserId == null || request.RequestTableElements == null)
+        {
+            return BadRequest();
+        }
+        var user = await Db.Users.FindAsync(request.UserId);
+        if (user == null)
+        {
+            return BadRequest();
+        }
+        var table = await TimetableService.UpdateTimetableForUser(user, request.RequestTableElements);
+        return Ok(await new TimetableResponse(Db).FetchTimetable(table));
     }
     
 }

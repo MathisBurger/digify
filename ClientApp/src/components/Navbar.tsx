@@ -1,6 +1,7 @@
 ﻿import {AppBar, Button, Link, Toolbar, Typography} from "@mui/material";
 import useCurrentUser from "../hooks/useCurrentUser";
 import {UserRole} from "../types/Models/UserRole";
+import {useHistory} from "react-router-dom";
 
 
 /**
@@ -9,6 +10,7 @@ import {UserRole} from "../types/Models/UserRole";
 const Navbar = () => {
     
     const {user} = useCurrentUser();
+    const history = useHistory();
     
     return (
         <AppBar
@@ -25,7 +27,7 @@ const Navbar = () => {
                     <Link
                         variant="button"
                         color="text.primary"
-                        href="/dashboard"
+                        onClick={() => history.push('/dashboard')}
                         sx={{ my: 1, mx: 1.5 }}
                     >
                         Home
@@ -33,7 +35,7 @@ const Navbar = () => {
                     <Link
                         variant="button"
                         color="text.primary"
-                        href="/classes"
+                        onClick={() => history.push('/classes')}
                         sx={{ my: 1, mx: 1.5 }}
                     >
                         Classes
@@ -42,7 +44,7 @@ const Navbar = () => {
                         <Link
                             variant="button"
                             color="text.primary"
-                            href="/user-management"
+                            onClick={() => history.push('/user-management')}
                             sx={{ my: 1, mx: 1.5 }}
                         >
                             Users

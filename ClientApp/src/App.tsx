@@ -6,6 +6,7 @@ import DataProvider from "./components/DataProvider";
 import UsersPage from "./pages/UsersPage";
 import Snackbar from "./components/Snackbar";
 import ClassesPage from "./pages/ClassesPage";
+import TimetablePage from "./pages/TimetablePage";
 
 export default class App extends Component {
     static displayName = App.name;
@@ -21,6 +22,7 @@ export default class App extends Component {
                                 <Route path="/dashboard" component={DashboardPage} />
                                 <Route path="/user-management" component={UsersPage} />
                                 <Route path="/classes" component={ClassesPage} />
+                                <Route path="/timetable" component={TimetablePage} />
                             </Switch>
                         </BrowserRouter>
                     </Snackbar>
