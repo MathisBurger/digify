@@ -125,4 +125,11 @@ export default class APIService extends RestService {
             JSON.stringify({class_id: classId, request_table_elements: elements})
         );
     }
+
+    /**
+     * Gets the classbook for the currently logged in student
+     */
+    public async getClassbookForCurrentUser(): Promise<any> {
+        return await this.get<any>(`${ORIGIN}/classbook`);
+    }
 }

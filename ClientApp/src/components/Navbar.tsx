@@ -40,6 +40,14 @@ const Navbar = () => {
                     >
                         Classes
                     </Link>
+                    <Link
+                        variant="button"
+                        color="text.primary"
+                        onClick={() => history.push('/classbook')}
+                        sx={{ my: 1, mx: 1.5 }}
+                    >
+                        Classbook
+                    </Link>
                     {user?.roles && user?.roles.includes(UserRole.ADMIN) ? (
                         <Link
                             variant="button"

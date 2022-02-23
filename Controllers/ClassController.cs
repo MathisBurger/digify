@@ -81,17 +81,18 @@ public class ClassController : AuthorizedControllerBase
         {
             return Unauthorized();
         }
-
+        
+        var newClass = new Class();
         var classbook = new Classbook();
         classbook.Archived = false;
         classbook.Year = (new DateTime()).Year.ToString();
-        Db.Classbooks.Add(classbook);
-        var newClass = new Class();
         classbook.ReferedClass = newClass;
         newClass.Name = request.Name;
         newClass.Classbook = classbook;
         Db.Classes.Attach(newClass);
         Db.Classes.Add(newClass);
+        Db.Classbooks.Attach(classbook);
+        Db.Classbooks.Add(classbook);
         foreach (var studentId in request.StudentsIDs)
         {
             var student = await Db.Users.FindAsync(Guid.Parse(studentId));

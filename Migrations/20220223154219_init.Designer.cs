@@ -12,8 +12,8 @@ using digify.Shared;
 namespace digify.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20220221091604_foreign_fix")]
-    partial class foreign_fix
+    [Migration("20220223154219_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,6 +23,21 @@ namespace digify.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("ClassbookDayEntryUser", b =>
+                {
+                    b.Property<Guid>("MissedDaysId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("MissingId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("MissedDaysId", "MissingId");
+
+                    b.HasIndex("MissingId");
+
+                    b.ToTable("ClassbookDayEntryUser");
+                });
 
             modelBuilder.Entity("ClassUser", b =>
                 {
@@ -55,6 +70,98 @@ namespace digify.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Classes");
+                });
+
+            modelBuilder.Entity("digify.Models.Classbook", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("Archived")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("ArchivedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("ArchivedName")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Year")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Classbooks");
+                });
+
+            modelBuilder.Entity("digify.Models.ClassbookDayEntry", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("CurrentDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Notes")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("ParentClassbookId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParentClassbookId");
+
+                    b.ToTable("ClassbookDayEntries");
+                });
+
+            modelBuilder.Entity("digify.Models.ClassbookDayEntryLesson", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("ApprovedByTeacher")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("ParentDayEntryId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("SubjectColor")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParentDayEntryId");
+
+                    b.ToTable("ClassbookDayEntryLessons");
                 });
 
             modelBuilder.Entity("digify.Models.Timetable", b =>
@@ -95,6 +202,10 @@ namespace digify.Migrations
 
                     b.Property<DateTime>("Start")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("SubjectColor")
                         .IsRequired()
@@ -142,6 +253,21 @@ namespace digify.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("ClassbookDayEntryUser", b =>
+                {
+                    b.HasOne("digify.Models.ClassbookDayEntry", null)
+                        .WithMany()
+                        .HasForeignKey("MissedDaysId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("digify.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("MissingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("ClassUser", b =>
                 {
                     b.HasOne("digify.Models.Class", null)
@@ -155,6 +281,39 @@ namespace digify.Migrations
                         .HasForeignKey("TeachersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("digify.Models.Classbook", b =>
+                {
+                    b.HasOne("digify.Models.Class", "ReferedClass")
+                        .WithOne("Classbook")
+                        .HasForeignKey("digify.Models.Classbook", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ReferedClass");
+                });
+
+            modelBuilder.Entity("digify.Models.ClassbookDayEntry", b =>
+                {
+                    b.HasOne("digify.Models.Classbook", "ParentClassbook")
+                        .WithMany("DayEntries")
+                        .HasForeignKey("ParentClassbookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ParentClassbook");
+                });
+
+            modelBuilder.Entity("digify.Models.ClassbookDayEntryLesson", b =>
+                {
+                    b.HasOne("digify.Models.ClassbookDayEntry", "ParentDayEntry")
+                        .WithMany("Lessons")
+                        .HasForeignKey("ParentDayEntryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ParentDayEntry");
                 });
 
             modelBuilder.Entity("digify.Models.Timetable", b =>
@@ -191,7 +350,20 @@ namespace digify.Migrations
 
             modelBuilder.Entity("digify.Models.Class", b =>
                 {
+                    b.Navigation("Classbook")
+                        .IsRequired();
+
                     b.Navigation("Students");
+                });
+
+            modelBuilder.Entity("digify.Models.Classbook", b =>
+                {
+                    b.Navigation("DayEntries");
+                });
+
+            modelBuilder.Entity("digify.Models.ClassbookDayEntry", b =>
+                {
+                    b.Navigation("Lessons");
                 });
 
             modelBuilder.Entity("digify.Models.Timetable", b =>

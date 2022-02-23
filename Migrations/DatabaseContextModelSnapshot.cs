@@ -93,7 +93,7 @@ namespace digify.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Classbook");
+                    b.ToTable("Classbooks");
                 });
 
             modelBuilder.Entity("digify.Models.ClassbookDayEntry", b =>
@@ -119,7 +119,7 @@ namespace digify.Migrations
 
                     b.HasIndex("ParentClassbookId");
 
-                    b.ToTable("ClassbookDayEntry");
+                    b.ToTable("ClassbookDayEntries");
                 });
 
             modelBuilder.Entity("digify.Models.ClassbookDayEntryLesson", b =>
@@ -159,7 +159,7 @@ namespace digify.Migrations
 
                     b.HasIndex("ParentDayEntryId");
 
-                    b.ToTable("ClassbookDayEntryLesson");
+                    b.ToTable("ClassbookDayEntryLessons");
                 });
 
             modelBuilder.Entity("digify.Models.Timetable", b =>

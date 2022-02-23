@@ -9,6 +9,7 @@ import ClassesPage from "./pages/ClassesPage";
 import TimetablePage from "./pages/TimetablePage";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import {LocalizationProvider} from "@mui/lab";
+import ClassbookPage from "./pages/ClassbookPage";
 
 export default class App extends Component {
     static displayName = App.name;
@@ -26,6 +27,7 @@ export default class App extends Component {
                                     <Route path="/user-management" component={UsersPage} />
                                     <Route path="/classes" component={ClassesPage} />
                                     <Route path="/timetable" component={TimetablePage} />
+                                    <Route path="/classbook" component={ClassbookPage} />
                                 </Switch>
                             </BrowserRouter>
                         </Snackbar>
