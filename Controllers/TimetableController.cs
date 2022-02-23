@@ -143,5 +143,70 @@ public class TimetableController : AuthorizedControllerBase
         var table = await TimetableService.UpdateTimetableForUser(user, request.RequestTableElements);
         return Ok(await new TimetableResponse(Db).FetchTimetable(table));
     }
+
+    [HttpPost("/timetable/create/forClass")]
+    [TypeFilter(typeof(RequiresAuthorization))]
+    public async Task<ActionResult<Timetable>> CreateTimetableForClass([FromBody] TimetableManagementRequest request)
+    {
+        if (
+            !AuthorizedUser.Roles.Contains(UserRoles.ADMIN) 
+            || request.ClassId == null 
+            || request.RequestTableElements == null
+        ) {
+            return Unauthorized();
+        }
+
+        var fetchedClass = await Db.Classes.FindAsync(request.ClassId);
+        if (fetchedClass == null)
+        {
+            return BadRequest();
+        }
+
+        return Ok(
+            await new TimetableResponse(Db).FetchTimetable(
+                await TimetableService.CreateTimetableForClass(fetchedClass, request.RequestTableElements)
+            )
+        );
+    }
     
+    [HttpDelete("/timetable/delete/forClass")]
+    [TypeFilter(typeof(RequiresAuthorization))]
+    public async Task<ActionResult> DeleteTimetableForClass([FromBody] TimetableManagementRequest request)
+    {
+        if (
+            !AuthorizedUser.Roles.Contains(UserRoles.ADMIN) 
+            || request.ClassId == null
+        ) {
+            return Unauthorized();
+        }
+
+        var fetchedClass = await Db.Classes.FindAsync(request.ClassId);
+        if (fetchedClass == null)
+        {
+            return BadRequest();
+        }
+
+        return Ok(
+            await new TimetableResponse(Db).FetchTimetable(
+                await TimetableService.DeleteTimetableForClass(fetchedClass)
+            )
+        );
+    }
+    
+    [HttpPost("/timetable/update/forClass")]
+    [TypeFilter(typeof(RequiresAuthorization))]
+    public async Task<ActionResult<Timetable>> UpdateTimetableForClass([FromBody] TimetableManagementRequest request)
+    {
+        if (request.ClassId == null || request.RequestTableElements == null)
+        {
+            return BadRequest();
+        }
+        var fetchedClass = await Db.Classes.FindAsync(request.ClassId);
+        if (fetchedClass == null)
+        {
+            return BadRequest();
+        }
+        var table = await TimetableService.UpdateTimetableForClass(fetchedClass, request.RequestTableElements);
+        return Ok(await new TimetableResponse(Db).FetchTimetable(table));
+    }
 }

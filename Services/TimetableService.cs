@@ -85,7 +85,37 @@ public class TimetableService
         }
 
         await Db.SaveChangesAsync();
-        return timetable;
+        return timetable!;
+    }
+
+    public async Task<Timetable> CreateTimetableForClass(Class fetchedClass, List<RequestTableElement> elements)
+    {
+        foreach (var user in fetchedClass.Students)
+        {
+            await CreateTimeTable(user, elements);
+        }
+
+        return (await Db.Timetables.FindAsync(fetchedClass.Students.First().Timetable!.Id))!;
+    }
+    
+    public async Task<Timetable> DeleteTimetableForClass(Class fetchedClass)
+    {
+        foreach (var user in fetchedClass.Students)
+        {
+            await DeleteTimeTable(user.Timetable!.Id);
+        }
+
+        return (await Db.Timetables.FindAsync(fetchedClass.Students.First().Timetable!.Id))!;
+    }
+    
+    public async Task<Timetable> UpdateTimetableForClass(Class fetchedClass, List<RequestTableElement> elements)
+    {
+        foreach (var user in fetchedClass.Students)
+        {
+            await UpdateTimetableForUser(user, elements);
+        }
+
+        return (await Db.Timetables.FindAsync(fetchedClass.Students.First().Timetable!.Id))!;
     }
 
 }
