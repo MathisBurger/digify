@@ -37,7 +37,7 @@ const FormSelectField = ({xs, value, label, multiple, onChange, options}: FormSe
         if (Array.isArray(value)) {
             return value.length > 0;
         }
-        return value === '';
+        return value !== '' && value !== null;
     }
     
     return (

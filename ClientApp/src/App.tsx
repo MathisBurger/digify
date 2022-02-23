@@ -7,7 +7,7 @@ import UsersPage from "./pages/UsersPage";
 import Snackbar from "./components/Snackbar";
 import ClassesPage from "./pages/ClassesPage";
 import TimetablePage from "./pages/TimetablePage";
-import AdapterDateFns from "@mui/lab/LocalizationProvider";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import {LocalizationProvider} from "@mui/lab";
 
 export default class App extends Component {
@@ -16,7 +16,6 @@ export default class App extends Component {
     render () {
         return (
             <>
-                {/* @ts-ignore */}
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <DataProvider>
                         <Snackbar>

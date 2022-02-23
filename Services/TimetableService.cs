@@ -2,6 +2,7 @@
 using digify.Models.Requests;
 using digify.Shared;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace digify.Services;
 
@@ -23,6 +24,7 @@ public class TimetableService
         newElement.Room = element.Room;
         newElement.SubjectColor = element.SubjectColor;
         newElement.Teacher = element.Teacher;
+        newElement.Subject = element.Subject;
         newElement.Parent = timetable;
         timetable.TableElements.Add(newElement);
         Db.TimeTableElements.Add(newElement);
@@ -36,6 +38,7 @@ public class TimetableService
         newElement.Room = element.Room;
         newElement.SubjectColor = element.SubjectColor;
         newElement.Teacher = element.Teacher;
+        newElement.Subject = element.Subject;
         Db.TimeTableElements.Update(newElement);
     }
 
@@ -72,7 +75,7 @@ public class TimetableService
         foreach (var element in elements)
         {
             var existingElement = await Db.TimeTableElements
-                .Where(e => e.Parent.Id == timetable!.Id && e.Start == element.Start && e.End == element.End)
+                .Where(e => e.Parent.Id == timetable!.Id && e.Id == element.Id)
                 .FirstOrDefaultAsync();
             if (existingElement == null)
             {

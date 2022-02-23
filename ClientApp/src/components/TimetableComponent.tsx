@@ -27,11 +27,11 @@ const TimetableComponent = ({timetable}: TimetableComponentProps) => {
     const currentDayEvents = timetable.table_elements.filter(e => e.day === currentDay);
     const reduced = currentDayEvents.filter(u => compareTimes(new Date(u.start_time), new Date(u.end_time)));
     const sorted = reduced.sort(
-        (a, b) => a.start_time.getTime() > b.start_time.getTime() ? 1 : -1
+        (a, b) => new Date(a.start_time).getTime() > new Date(b.start_time).getTime() ? 1 : -1
     );
     
     return (
-        <Timeline position="alternate">
+        <Timeline>
             {sorted.map((e, i) => (
                 <TimelineItem key={i}>
                     <TimelineOppositeContent color="text.secondary">

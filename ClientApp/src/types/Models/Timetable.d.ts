@@ -10,4 +10,5 @@ export interface TimeTableElement {
     room: string;
     subject_color: string;
     subject: string;
+    id?: string;
 }

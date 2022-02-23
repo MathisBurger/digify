@@ -24,4 +24,7 @@ public class RequestTableElement
     
     [JsonPropertyName("subject")]
     public string Subject { get; set; }
+    
+    [JsonPropertyName("id")]
+    public Guid? Id { get; set; }
 }
