@@ -12,6 +12,9 @@ public interface IContext : IDisposable
     DbSet<Class> Classes { get; set; }
     DbSet<Timetable> Timetables { get; set; }
     DbSet<TimeTableElement> TimeTableElements { get; set; }
+    public DbSet<Classbook> Classbooks { get; set; }
+    public DbSet<ClassbookDayEntry> ClassbookDayEntries { get; set; }
+    public DbSet<ClassbookDayEntryLesson> ClassbookDayEntryLessons { get; set; }
 
     DatabaseFacade Database { get; }
 

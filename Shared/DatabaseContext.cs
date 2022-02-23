@@ -11,6 +11,9 @@ public class DatabaseContext : DbContext, IContext
     public DbSet<Class> Classes { get; set; }
     public DbSet<Timetable> Timetables { get; set; }
     public DbSet<TimeTableElement> TimeTableElements { get; set; }
+    public DbSet<Classbook> Classbooks { get; set; }
+    public DbSet<ClassbookDayEntry> ClassbookDayEntries { get; set; }
+    public DbSet<ClassbookDayEntryLesson> ClassbookDayEntryLessons { get; set; }
 
     public DatabaseContext(DbContextOptions options) : base(options)
     { }
