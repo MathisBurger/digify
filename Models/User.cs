@@ -48,5 +48,6 @@ public class User: Entity
         SchoolClass = null;
         Timetable = null;
         Classes = new List<Class>();
+        MissedDays = new List<ClassbookDayEntry>();
     }
 }

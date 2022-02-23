@@ -17,4 +17,10 @@ public class ClassbookDayEntry : Entity
     
     public string Notes { get; set; }
 
+    public ClassbookDayEntry()
+    {
+        Lessons = new List<ClassbookDayEntryLesson>();
+        Missing = new List<User>();
+    }
+
 }

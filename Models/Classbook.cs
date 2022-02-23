@@ -18,6 +18,9 @@ public class Classbook : Entity
     
     [InverseProperty("ParentClassbook")]
     public ICollection<ClassbookDayEntry> DayEntries { get; set; }
-    
-    
+
+    public Classbook()
+    {
+        DayEntries = new List<ClassbookDayEntry>();
+    }
 }
