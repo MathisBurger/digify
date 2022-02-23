@@ -39,6 +39,9 @@ public class User: Entity
     [InverseProperty("OwningUser")]
     public Timetable? Timetable { get; set; }
     
+    [InverseProperty("Missing")]
+    public ICollection<ClassbookDayEntry> MissedDays { get; set; }
+
 
     public User()
     {
