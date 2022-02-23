@@ -2,10 +2,11 @@
 import useApiService from "../hooks/useApiService";
 import {useEffect, useState} from "react";
 import {ChevronRight, Edit, ExpandMore} from "@mui/icons-material";
-import {Timetable} from "../types/Models/Timetable";
+import {Timetable, TimeTableElement} from "../types/Models/Timetable";
 import {TreeView} from "@mui/lab";
 import {CircularProgress, Grid} from "@mui/material";
 import ModifiedTreeItem from "../components/ModifiedTreeItem";
+import EditTimetableDialog from "../dialogs/timetable/EditTimetableDialog";
 
 
 const TimetablePage = () => {
@@ -13,6 +14,7 @@ const TimetablePage = () => {
     const params = new URLSearchParams(window.location.search);
     const apiService = useApiService();
     const [timetable, setTimetable] = useState<Timetable | null>(null);
+    const [editingDialog, setEditingDialog] = useState<{open: boolean, entry: TimeTableElement|null}>({open: false, entry: null});
     
     const getAllDays = (): string[] => {
         const days: string[] = [];
@@ -69,9 +71,14 @@ const TimetablePage = () => {
                                         >
                                             <ModifiedTreeItem
                                                 nodeId={`${day}-${element.start_time}-color`}
-                                                label="Color"
-                                                whiteFont
-                                                color={element.subject_color}
+                                                label={
+                                                <div style={{
+                                                  borderRadius: '50%',
+                                                  width: '20px',
+                                                  height: '20px',
+                                                  background: element.subject_color  
+                                                }} />
+                                                }
                                             />
                                             <ModifiedTreeItem 
                                                 nodeId={`${day}-${element.start_time}-room`}
@@ -90,6 +97,7 @@ const TimetablePage = () => {
                                                 nodeId={`${day}-${element.start_time}-edit`}
                                                 label="Edit"
                                                 icon={<Edit />}
+                                                onClick={() => setEditingDialog({open: true, entry: element})}
                                             />
                                         </ModifiedTreeItem>
                                     ))}
@@ -101,6 +109,12 @@ const TimetablePage = () => {
                     )}
                 </Grid>
             </Grid>
+            {editingDialog.open && editingDialog.entry !== null ? (
+                <EditTimetableDialog 
+                    element={editingDialog.entry} 
+                    updateElement={(element) => {}}
+                />
+            ) : null}
         </PageLayout>
     )
 }
