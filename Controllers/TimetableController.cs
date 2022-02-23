@@ -69,9 +69,13 @@ public class TimetableController : AuthorizedControllerBase
         if (classId != null)
         {
             var studentClass = await Db.Classes.FindAsync(classId);
-            if (studentClass == null) return BadRequest();
-            var student = (await Db.Users.FindAsync(studentClass.Students.First().Id))!;
+            if (studentClass == null) return BadRequest("Class not found");
+            var student = await Db.Users
+                .Where(u => u.SchoolClass!.Id == studentClass.Id)
+                .FirstOrDefaultAsync();
+            if (student == null) return BadRequest("Class contains no students");
             var timetable = await Db.Timetables.Where(t => t.OwningUser.Id == student.Id).FirstOrDefaultAsync();
+            if (timetable == null) return BadRequest("Timetable for class not found");
             return Ok(await new TimetableResponse(Db).FetchTimetable(timetable!));
         }
 
@@ -195,18 +199,18 @@ public class TimetableController : AuthorizedControllerBase
     
     [HttpPost("/timetable/update/forClass")]
     [TypeFilter(typeof(RequiresAuthorization))]
-    public async Task<ActionResult<Timetable>> UpdateTimetableForClass([FromBody] TimetableManagementRequest request)
+    public async Task<ActionResult> UpdateTimetableForClass([FromBody] TimetableManagementRequest request)
     {
         if (request.ClassId == null || request.RequestTableElements == null)
         {
-            return BadRequest();
+            return BadRequest("Invalid request params");
         }
         var fetchedClass = await Db.Classes.FindAsync(request.ClassId);
         if (fetchedClass == null)
         {
-            return BadRequest();
+            return BadRequest("Class not found");
         }
-        var table = await TimetableService.UpdateTimetableForClass(fetchedClass, request.RequestTableElements);
-        return Ok(await new TimetableResponse(Db).FetchTimetable(table));
+        await TimetableService.UpdateTimetableForClass(fetchedClass, request.RequestTableElements);
+        return Ok();
     }
 }

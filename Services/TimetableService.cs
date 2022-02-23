@@ -111,14 +111,15 @@ public class TimetableService
         return (await Db.Timetables.FindAsync(fetchedClass.Students.First().Timetable!.Id))!;
     }
     
-    public async Task<Timetable> UpdateTimetableForClass(Class fetchedClass, List<RequestTableElement> elements)
+    public async Task UpdateTimetableForClass(Class fetchedClass, List<RequestTableElement> elements)
     {
-        foreach (var user in fetchedClass.Students)
+        var students = await Db.Users
+            .Where(u => u.SchoolClass!.Id == fetchedClass.Id)
+            .ToListAsync();
+        foreach (var user in students)
         {
             await UpdateTimetableForUser(user, elements);
         }
-
-        return (await Db.Timetables.FindAsync(fetchedClass.Students.First().Timetable!.Id))!;
     }
 
 }

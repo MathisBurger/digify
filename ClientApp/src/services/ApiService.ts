@@ -112,4 +112,17 @@ export default class APIService extends RestService {
             JSON.stringify({user_id: userId, request_table_elements: elements})
         );
     }
+
+    /**
+     * Updates the timetable of a user
+     *
+     * @param classId The class thats timetable should be updated
+     * @param elements All elements of the timetable
+     */
+    public async updateTimetableForClass(classId: string, elements: TimeTableElement[]): Promise<any> {
+        return await this.post<any>(
+            `${ORIGIN}/timetable/update/forClass`,
+            JSON.stringify({class_id: classId, request_table_elements: elements})
+        );
+    }
 }

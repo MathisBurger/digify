@@ -2,12 +2,14 @@ import useApiService from "../../hooks/useApiService";
 import {GridColDef, GridRowModel} from "@mui/x-data-grid";
 import DataList from "../DataList/DataList";
 import {useEffect, useState} from "react";
-import {Remove} from "@mui/icons-material";
+import {CalendarViewMonth, Remove} from "@mui/icons-material";
+import {useHistory} from "react-router-dom";
 
 
 const ClassesList = () => {
     
     const apiService = useApiService();
+    const history = useHistory();
     
     const [classes, setClasses] = useState<any[]>([]);
     
@@ -56,6 +58,11 @@ const ClassesList = () => {
                     onClick: async (row: GridRowModel) => {
                         await apiService.deleteClass(row.id);
                     }
+                },
+                {
+                    icon: CalendarViewMonth,
+                    onClick: (row: GridRowModel) =>
+                        history.push(`/timetable?action=forClass&elementId=${row.id}`)
                 }
             ]}
         />
