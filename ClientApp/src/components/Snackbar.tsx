@@ -10,7 +10,7 @@ import {Snackbar as MuiSnackbar} from "@mui/material";
  */
 const Snackbar = ({children}: React.PropsWithChildren<any>) => {
     
-    const [snackbarOpen, setSnackbarOpen] = useState<boolean>(true);
+    const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
     const [snackbarValues, setSnackbarValues] = useState<SnackbarValues|null>(null);
     
     useEffect(() => {
