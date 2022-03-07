@@ -99,6 +99,9 @@ const EditTimetableDialog = ({element, updateElement, onClose}: EditTimetableDia
                             renderInput={(props) => <TextField {...props} />}
                         />
                     </Grid>
+                    <Grid item xs={6}>
+                        <input type="color" onChange={(e) => setEntry({...entry, subject_color: e.target.value}) } />
+                    </Grid>
                 </Grid>
             </DialogContent>
             <DialogActions>

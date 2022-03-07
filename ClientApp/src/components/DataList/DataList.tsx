@@ -29,6 +29,7 @@ type DataListProps = Pick<
     'columns'
     | 'rows'
     | 'loading'
+    | 'density'
     >
 & {
   singleActions?: SingleAction[];  
@@ -42,6 +43,7 @@ const DataList = ({
     columns,
     rows,
     loading,
+    density,
     singleActions = undefined
 }: DataListProps) => {
 
@@ -89,6 +91,7 @@ const DataList = ({
               columns={prepareColumns()} 
               rows={prepareContent} 
               loading={loading}
+              density={density}
               checkboxSelection
               disableSelectionOnClick={true}
               getRowId={(row) => row.ghostID}

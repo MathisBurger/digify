@@ -2,6 +2,8 @@
 import {useEffect} from "react";
 import useCurrentUser from "../../hooks/useCurrentUser";
 import {UserRole} from "../../types/Models/UserRole";
+import {Grid} from "@mui/material";
+import ClassbookTodayView from "./ClassbookTodayView";
 
 
 const ClassbookDisplay = () => {
@@ -19,7 +21,11 @@ const ClassbookDisplay = () => {
     })
     
     return (
-        <div />
+        <Grid container>
+            <Grid item xs={6}>
+                <ClassbookTodayView />
+            </Grid>
+        </Grid>
     );
 }
 
