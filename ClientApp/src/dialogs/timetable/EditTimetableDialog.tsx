@@ -69,9 +69,11 @@ const EditTimetableDialog = ({element, updateElement, onClose}: EditTimetableDia
                         xs={12} 
                         value={entry.teacher} 
                         multiple={false}
-                        onChange={(e) => setEntry({...entry, teacher: '' + e.target.value})} 
+                        onChange={(e) => 
+                            setEntry({...entry, teacher: teachers.filter(t => t.id === e.target.value)[0]})
+                    } 
                         label="Teacher"
-                        options={teachers.map(teacher => ({key: teacher.username, value: teacher.username}))}
+                        options={teachers.map(teacher => ({key: teacher.id, value: teacher.username}))}
                     />
                     <Grid item xs={6}>
                         <TimePicker 

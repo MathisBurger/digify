@@ -13,10 +13,11 @@ import useSnackbar from "../hooks/useSnackbar";
 const defaultTableElement = {
     start_time: new Date(),
     end_time: new Date(),
-    teacher: '',
+    teacher: undefined,
     room: '',
     subject: '',
-    subject_color: '#D2D2D2'
+    subject_color: '#D2D2D2',
+    day: '1'
 } as TimeTableElement;
 
 const TimetablePage = () => {
@@ -114,7 +115,7 @@ const TimetablePage = () => {
                                                 />
                                                 <ModifiedTreeItem
                                                     nodeId={`${day}-${element.start_time}-teacher`}
-                                                    label={`Teacher: ${element.teacher}`}
+                                                    label={`Teacher: ${element.teacher ? element.teacher.username: null}`}
                                                 />
                                                 <ModifiedTreeItem
                                                     nodeId={`${day}-${element.start_time}-date`}

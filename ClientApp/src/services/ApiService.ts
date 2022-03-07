@@ -109,7 +109,9 @@ export default class APIService extends RestService {
     public async updateTimetableForUser(userId: string, elements: TimeTableElement[]): Promise<Timetable> {
         return await this.post<Timetable>(
             `${ORIGIN}/timetable/update/forUser`, 
-            JSON.stringify({user_id: userId, request_table_elements: elements})
+            JSON.stringify({user_id: userId, request_table_elements: elements.map(e => ({
+                    ...e, teacher: e.teacher ? e.teacher.id: ''}
+            ))})
         );
     }
 
@@ -122,7 +124,9 @@ export default class APIService extends RestService {
     public async updateTimetableForClass(classId: string, elements: TimeTableElement[]): Promise<any> {
         return await this.post<any>(
             `${ORIGIN}/timetable/update/forClass`,
-            JSON.stringify({class_id: classId, request_table_elements: elements})
+            JSON.stringify({class_id: classId, request_table_elements: elements.map(e => ({
+                        ...e, teacher: e.teacher ? e.teacher.id: ''}
+                ))})
         );
     }
 

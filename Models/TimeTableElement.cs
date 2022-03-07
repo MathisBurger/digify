@@ -15,7 +15,7 @@ public class TimeTableElement : Entity
     public DateTime End { get; set; }
     
     [JsonPropertyName("teacher")]
-    public string Teacher { get; set; }
+    public User Teacher { get; set; }
     
     [JsonPropertyName("room")]
     public string Room { get; set; }

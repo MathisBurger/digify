@@ -15,29 +15,33 @@ public class TimetableService
         Db = db;
     }
 
-    private void CreateElement(Timetable timetable, RequestTableElement element)
+    private async Task CreateElement(Timetable timetable, RequestTableElement element)
     {
+        var teacher = await Db.Users.FindAsync(element.Teacher);
+        if (teacher == null || !teacher.Roles.Contains(UserRoles.TEACHER)) throw new Exception("User is not a teacher");
         var newElement = new TimeTableElement();
         newElement.Day = element.Day;
         newElement.End = element.End;
         newElement.Start = element.Start;
         newElement.Room = element.Room;
         newElement.SubjectColor = element.SubjectColor;
-        newElement.Teacher = element.Teacher;
+        newElement.Teacher = teacher;
         newElement.Subject = element.Subject;
         newElement.Parent = timetable;
         timetable.TableElements.Add(newElement);
         Db.TimeTableElements.Add(newElement);
     }
 
-    private void UpdateElement(TimeTableElement newElement, RequestTableElement element)
+    private async Task UpdateElement(TimeTableElement newElement, RequestTableElement element)
     {
+        var teacher = await Db.Users.FindAsync(element.Teacher);
+        if (teacher == null || !teacher.Roles.Contains(UserRoles.TEACHER)) throw new Exception("User is not a teacher");
         newElement.Day = element.Day;
         newElement.End = element.End;
         newElement.Start = element.Start;
         newElement.Room = element.Room;
         newElement.SubjectColor = element.SubjectColor;
-        newElement.Teacher = element.Teacher;
+        newElement.Teacher = teacher;
         newElement.Subject = element.Subject;
         Db.TimeTableElements.Update(newElement);
     }
@@ -79,11 +83,11 @@ public class TimetableService
                 .FirstOrDefaultAsync();
             if (existingElement == null)
             {
-                CreateElement(timetable!, element);
+                await CreateElement(timetable!, element);
             }
             else
             {
-                UpdateElement(existingElement, element);
+                await UpdateElement(existingElement, element);
             }
         }
 
@@ -129,6 +133,17 @@ public class TimetableService
             .Include(t => t.TableElements)
             .FirstOrDefaultAsync();
         if (fetchedTimetable == null) throw new Exception("User has no timetable");
+        var entries = new List<TimeTableElement>();
+        foreach (var element in fetchedTimetable.TableElements)
+        {
+            entries.Add((await Db.TimeTableElements
+                    .Include(e => e.Teacher)
+                    .Where(e => e.Id == element.Id)
+                    .FirstOrDefaultAsync())!
+            );
+        }
+
+        fetchedTimetable.TableElements = entries;
         return fetchedTimetable.TableElements.Where(e => e.Day == ParseDayOfWeekToNumber(day)).ToList();
     }
 

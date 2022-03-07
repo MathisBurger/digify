@@ -45,7 +45,7 @@ const TimetableComponent = ({timetable}: TimetableComponentProps) => {
                     <TimelineContent>
                         <Typography fontWeight="bold">{e.subject}</Typography>
                         <Typography>{e.room}</Typography>
-                        <Typography>{e.teacher}</Typography>
+                        <Typography>{e.teacher ? e.teacher.username : ''}</Typography>
                     </TimelineContent>
                 </TimelineItem>
             ))}

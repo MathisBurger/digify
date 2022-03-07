@@ -33,6 +33,7 @@ public class ClassbookService
         foreach (var eventElement in timetableEvents)
         {
             var element = FormatTimetableEventToClassbookDayEntryLesson(eventElement);
+            element.Teacher = eventElement.Teacher;
             element.ParentDayEntry = entry;
             Db.ClassbookDayEntryLessons.Attach(element);
             Db.ClassbookDayEntryLessons.Add(element);

@@ -19,4 +19,6 @@ public class ClassbookDayEntryLesson : Entity
     public string SubjectColor { get; set; }
     
     public bool ApprovedByTeacher { get; set; }
+    
+    public User? Teacher { get; set; }
 }

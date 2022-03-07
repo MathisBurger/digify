@@ -155,9 +155,14 @@ namespace digify.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<Guid?>("TeacherId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ParentDayEntryId");
+
+                    b.HasIndex("TeacherId");
 
                     b.ToTable("ClassbookDayEntryLessons");
                 });
@@ -209,13 +214,14 @@ namespace digify.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Teacher")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<Guid>("TeacherId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ParentId");
+
+                    b.HasIndex("TeacherId");
 
                     b.ToTable("TimeTableElements");
                 });
@@ -311,7 +317,13 @@ namespace digify.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("digify.Models.User", "Teacher")
+                        .WithMany()
+                        .HasForeignKey("TeacherId");
+
                     b.Navigation("ParentDayEntry");
+
+                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("digify.Models.Timetable", b =>
@@ -333,7 +345,15 @@ namespace digify.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("digify.Models.User", "Teacher")
+                        .WithMany()
+                        .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Parent");
+
+                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("digify.Models.User", b =>
