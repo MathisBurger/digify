@@ -5,7 +5,7 @@ export interface Classbook {
     archivedDate: Date|null;
     archivedName: string|null;
     created: Date;
-    dayEntries: any[];
+    dayEntries: ClassbookDayEntry[];
     id: string;
     year: string;
 }

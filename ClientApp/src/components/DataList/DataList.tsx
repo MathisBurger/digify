@@ -33,6 +33,7 @@ type DataListProps = Pick<
     >
 & {
   singleActions?: SingleAction[];  
+  customID?: boolean;
 };
 
 /**
@@ -44,7 +45,8 @@ const DataList = ({
     rows,
     loading,
     density,
-    singleActions = undefined
+    singleActions = undefined,
+    customID = false
 }: DataListProps) => {
 
     /**
@@ -94,7 +96,8 @@ const DataList = ({
               density={density}
               checkboxSelection
               disableSelectionOnClick={true}
-              getRowId={(row) => row.ghostID}
+              onCellEditCommit={(e) => console.log(e)}
+              getRowId={(row) => customID ? row.id : row.ghostID}
               components={{
                   Toolbar: CustomToolbar
               }}

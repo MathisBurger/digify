@@ -25,11 +25,22 @@ public class ClassbookResponse
         if (fetchedClassbook == null) return null;
         foreach (var classbookDayEntry in fetchedClassbook.DayEntries)
         {
-            entries.Add((await Db.ClassbookDayEntries
-                    .Include(e => e.Lessons)
-                    .Where(e => e.Id == classbookDayEntry.Id)
+            var entry = (await Db.ClassbookDayEntries
+                .Include(e => e.Lessons)
+                .Where(e => e.Id == classbookDayEntry.Id)
+                .FirstOrDefaultAsync())!;
+            var lessons = new List<ClassbookDayEntryLesson>();
+            foreach (var lesson in entry.Lessons)
+            {
+                lessons.Add((await Db.ClassbookDayEntryLessons
+                    .Include(l => l.Teacher)
+                    .Where(l => l.Id == lesson.Id)
                     .FirstOrDefaultAsync())!
-            );
+                    );
+            }
+
+            entry.Lessons = lessons;
+            entries.Add(entry);
         }
 
         fetchedClassbook.DayEntries = entries;
