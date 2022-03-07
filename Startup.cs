@@ -26,6 +26,7 @@ public class Startup
         services.AddControllers();
         services.AddDbContext<IContext, DatabaseContext>(ctx =>
             ctx.UseNpgsql(Configuration.GetValue<string>("database:postgresConnectionString"))
+                .EnableDetailedErrors()
         );
         services.AddSwaggerGen();
         services.AddSingleton<IPasswordHasher, Argon2IdHasher>();

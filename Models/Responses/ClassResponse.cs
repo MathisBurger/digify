@@ -15,11 +15,10 @@ public class ClassResponse
 
     public async Task<Class?> ParseSingle(Class cClass)
     {
-        var fetchedClass = await Db.Classes.FindAsync(cClass.Id);
-        fetchedClass!.Students = await Db.Users.Where(
-            u => u.SchoolClass != null && u.SchoolClass.Id == cClass.Id
-        ).ToListAsync();
-        fetchedClass!.Teachers = await Db.Users.Where(t => t.Classes.Contains(cClass)).ToListAsync();
+        var fetchedClass = await Db.Classes
+            .Include(c => c.Students)
+            .Include(c => c.Teachers)
+            .Where(c => cClass.Id == c.Id).FirstOrDefaultAsync();
         return fetchedClass;
     }
     

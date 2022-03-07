@@ -1,4 +1,6 @@
-﻿namespace digify.Models;
+﻿using System;
+
+namespace digify.Models;
 
 public class ServerInformation
 {
@@ -7,7 +9,7 @@ public class ServerInformation
 
     public ServerInformation(string apiVersion)
     {
-        this.ApiVersion = apiVersion;
-        this.CurrentDate = new DateTime();
+        ApiVersion = apiVersion;
+        CurrentDate = DateTime.Now;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using digify.Filters;
 using digify.Models;
+using digify.Models.Responses;
 using digify.Modules;
 using digify.Services;
 using digify.Shared;
@@ -23,7 +24,7 @@ public class ClassbookController : AuthorizedControllerBase
         Db = _db;
         Authorization = _auth;
         Logger = logger;
-        ClassbookService = new ClassbookService(_db);
+        ClassbookService = new ClassbookService(_db, logger);
     }
 
     [HttpGet("/classbook")]
@@ -35,7 +36,7 @@ public class ClassbookController : AuthorizedControllerBase
             return BadRequest("You do not own any classbook, because you are not a member of a class");
         }
 
-        return Ok(await ClassbookService.GetClassbookByStudent(AuthorizedUser));
+        return Ok(await new ClassbookResponse(Db).ParseSingle(await ClassbookService.GetClassbookByStudent(AuthorizedUser)));
     }
     
 }

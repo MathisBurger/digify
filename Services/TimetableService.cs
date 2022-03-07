@@ -122,4 +122,26 @@ public class TimetableService
         }
     }
 
+    public async Task<List<TimeTableElement>> GetElementsForDay(User user, string day)
+    {
+        var fetchedTimetable = await Db.Timetables
+            .Where(t => t.OwningUser.Id == user.Id)
+            .Include(t => t.TableElements)
+            .FirstOrDefaultAsync();
+        if (fetchedTimetable == null) throw new Exception("User has no timetable");
+        return fetchedTimetable.TableElements.Where(e => e.Day == ParseDayOfWeekToNumber(day)).ToList();
+    }
+
+    private string ParseDayOfWeekToNumber(string dayOfWeek)
+    {
+        switch (dayOfWeek)
+        {
+            case "Monday": return "1";
+            case "Tuesday": return "2";
+            case "Wednesday": return "3";
+            case "Thursday": return "4";
+            case "Friday": return "5";
+            default: return "6";
+        }
+    }
 }

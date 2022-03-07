@@ -64,8 +64,6 @@ const TimetablePage = () => {
                     await apiService.updateTimetableForUser(params.get('elementId')!, timetable?.table_elements!);
                 } else if (params.get('action') === 'forClass') {
                     await apiService.updateTimetableForClass(params.get('elementId')!, timetable?.table_elements!);
-                } else {
-                    throw new Error('');
                 }
                 if (snackbar.setSnackbar) {
                     snackbar.setSnackbar({color: "success", message: "Successfully updated timetable"});

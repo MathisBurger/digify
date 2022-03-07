@@ -85,7 +85,7 @@ public class ClassController : AuthorizedControllerBase
         var newClass = new Class();
         var classbook = new Classbook();
         classbook.Archived = false;
-        classbook.Year = (new DateTime()).Year.ToString();
+        classbook.Year = DateTime.Now.Year.ToString();
         classbook.ReferedClass = newClass;
         newClass.Name = request.Name;
         newClass.Classbook = classbook;
