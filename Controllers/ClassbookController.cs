@@ -1,10 +1,12 @@
 ﻿using digify.Filters;
 using digify.Models;
+using digify.Models.Requests;
 using digify.Models.Responses;
 using digify.Modules;
 using digify.Services;
 using digify.Shared;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace digify.Controllers;
 
@@ -37,6 +39,42 @@ public class ClassbookController : AuthorizedControllerBase
         }
 
         return Ok(await new ClassbookResponse(Db).ParseSingle(await ClassbookService.GetClassbookByStudent(AuthorizedUser)));
+    }
+    
+    [HttpPost("/classbook/updateLesson")]
+    [TypeFilter(typeof(RequiresAuthorization))]
+    public async Task<ActionResult<Classbook>> UpdateClassbookLessonForClass([FromBody] ClassbookUpdateRequest request)
+    {
+        if (request.LessonToUpdate == null)
+        {
+            return BadRequest("Invalid request body");
+        }
+
+        var rawClassbook = await Db.Classbooks.FindAsync(request.Id);
+        var classbook = await new ClassbookResponse(Db).ParseSingle(rawClassbook);
+        if (classbook == null) throw new Exception("DB error");
+        var lesson = await Db.ClassbookDayEntryLessons
+            .Include(l => l.ParentDayEntry)
+            .Where(l => l.Id == request.LessonToUpdate.Id)
+            .FirstOrDefaultAsync();
+        if (lesson == null) throw new Exception("Lesson does not exist");
+        if (classbook.DayEntries.FirstOrDefault(e => e.Id == lesson.ParentDayEntry.Id) == null)
+        {
+            throw new Exception("Lesson does not exist on classbook");
+        }
+
+        lesson = UpdateLessonOfRequestWithoutSaving(lesson, request.LessonToUpdate);
+        Db.ClassbookDayEntryLessons.Update(lesson);
+        await Db.SaveChangesAsync();
+        return (await new ClassbookResponse(Db).ParseSingle(classbook))!;
+    }
+
+    private ClassbookDayEntryLesson UpdateLessonOfRequestWithoutSaving(ClassbookDayEntryLesson lesson,
+        RequestClassbookLesson request)
+    {
+        lesson.Content = request.Content;
+        lesson.ApprovedByTeacher = request.ApprovedByTeacher;
+        return lesson;
     }
     
 }

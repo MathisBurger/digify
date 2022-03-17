@@ -80,7 +80,13 @@ public class ClassbookService
         if (null == todayEntry)
         {
             await CreateDayEntry(classbook, DateTime.Now.ToUniversalTime());
+            await Db.SaveChangesAsync();
         }
-        return classbook;
+        classbook = await Db.Classbooks
+            .Include(c => c.DayEntries)
+            .Include(c => c.ReferedClass)
+            .Where(c => c.ReferedClass!.Id == fetchedClass.Id)
+            .FirstOrDefaultAsync();
+        return classbook!;
     }
 }
