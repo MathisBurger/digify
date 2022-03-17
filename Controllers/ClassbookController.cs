@@ -70,6 +70,22 @@ public class ClassbookController : AuthorizedControllerBase
         return (await new ClassbookResponse(Db).ParseSingle(classbook))!;
     }
 
+    [HttpPost("/classbook/addMissing")]
+    [TypeFilter(typeof(RequiresAuthorization))]
+    public async Task<ActionResult<Classbook>> AddMissingPerson([FromBody] ClassbookMissingRequest request)
+    {
+        await ClassbookService.AddMissingPerson(request.ClassbookId, request.MissingId);
+        return (await new ClassbookResponse(Db).ParseSingle(await Db.Classbooks.FindAsync(request.ClassbookId)))!;
+    }
+
+    [HttpDelete("/classbook/removeMissing")]
+    [TypeFilter(typeof(RequiresAuthorization))]
+    public async Task<ActionResult<Classbook>> RemoveMissingPerson([FromBody] ClassbookMissingRequest request)
+    {
+        await ClassbookService.RemoveMissingPerson(request.ClassbookId, request.MissingId);
+        return (await new ClassbookResponse(Db).ParseSingle(await Db.Classbooks.FindAsync(request.ClassbookId)))!;
+    }
+
     private ClassbookDayEntryLesson UpdateLessonOfRequestWithoutSaving(ClassbookDayEntryLesson lesson,
         RequestClassbookLesson request)
     {

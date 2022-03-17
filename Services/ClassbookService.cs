@@ -89,4 +89,56 @@ public class ClassbookService
             .FirstOrDefaultAsync();
         return classbook!;
     }
+
+    public async Task<ClassbookDayEntry> AddMissingPerson(Guid classbookID, Guid missingID)
+    {
+        var classbook = await Db.Classbooks
+            .Include(c => c.DayEntries)
+            .Include(c => c.ReferedClass)
+            .FirstOrDefaultAsync(c => c.Id == classbookID);
+        if (classbook == null) throw new Exception("Classbook does not exist");
+        var missingStudent = await Db.Users.FirstOrDefaultAsync(u => u.Id == missingID);
+        if (missingStudent == null || !missingStudent.Roles.Contains(UserRoles.STUDENT))
+        {
+            throw new Exception("The requested user is not an student or does not exist");
+        }
+
+        var todayEntry = classbook.DayEntries
+            .FirstOrDefault(e => e.CurrentDate.DayOfYear == new DateTime().DayOfYear);
+        if (todayEntry == null) throw new Exception("There is no entry existing for the current day");
+        if (todayEntry.Missing.FirstOrDefault(u => u.Id == missingID) != null)
+        {
+            throw new Exception("User is already entered as missing for the current day");
+        }
+        todayEntry.Missing.Add(missingStudent);
+        Db.ClassbookDayEntries.Update(todayEntry);
+        await Db.SaveChangesAsync();
+        return todayEntry;
+    }
+    
+    public async Task<ClassbookDayEntry> RemoveMissingPerson(Guid classbookID, Guid missingID)
+    {
+        var classbook = await Db.Classbooks
+            .Include(c => c.DayEntries)
+            .Include(c => c.ReferedClass)
+            .FirstOrDefaultAsync(c => c.Id == classbookID);
+        if (classbook == null) throw new Exception("Classbook does not exist");
+        var missingStudent = await Db.Users.FirstOrDefaultAsync(u => u.Id == missingID);
+        if (missingStudent == null || !missingStudent.Roles.Contains(UserRoles.STUDENT))
+        {
+            throw new Exception("The requested user is not an student or does not exist");
+        }
+
+        var todayEntry = classbook.DayEntries
+            .FirstOrDefault(e => e.CurrentDate.DayOfYear == new DateTime().DayOfYear);
+        if (todayEntry == null) throw new Exception("There is no entry existing for the current day");
+        if (todayEntry.Missing.FirstOrDefault(u => u.Id == missingID) == null)
+        {
+            throw new Exception("User is not missing today");
+        }
+        todayEntry.Missing.Remove(missingStudent);
+        Db.ClassbookDayEntries.Update(todayEntry);
+        await Db.SaveChangesAsync();
+        return todayEntry;
+    }
 }
