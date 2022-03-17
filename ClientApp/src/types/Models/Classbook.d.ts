@@ -30,3 +30,9 @@ export interface ClassbookDayEntryLesson {
     subjectColor: string;
     teacher: User;
 }
+
+export interface RequestClassbookLesson {
+    approvedByTeacher: boolean;
+    content: string;
+    id: string;
+}

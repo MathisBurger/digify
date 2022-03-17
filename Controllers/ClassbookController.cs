@@ -45,7 +45,8 @@ public class ClassbookController : AuthorizedControllerBase
     [TypeFilter(typeof(RequiresAuthorization))]
     public async Task<ActionResult<Classbook>> UpdateClassbookLessonForClass([FromBody] ClassbookUpdateRequest request)
     {
-        if (request.LessonToUpdate == null)
+        if (request.LessonToUpdate == null 
+            || (request.LessonToUpdate.Content == String.Empty && request.LessonToUpdate.Content != ""))
         {
             return BadRequest("Invalid request body");
         }

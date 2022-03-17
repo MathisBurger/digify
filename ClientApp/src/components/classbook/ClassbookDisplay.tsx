@@ -33,7 +33,11 @@ const ClassbookDisplay = () => {
     return (
         <Grid container>
             <Grid item xs={6}>
-                <ClassbookTodayView lessons={getCurrentDayLessons()} loading={classbook === null} />
+                <ClassbookTodayView 
+                    lessons={getCurrentDayLessons()} 
+                    loading={classbook === null} 
+                    classbookID={classbook?.id ?? ""}
+                />
             </Grid>
         </Grid>
     );

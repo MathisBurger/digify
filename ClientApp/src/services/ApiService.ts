@@ -2,6 +2,7 @@ import RestService from "./RestService";
 import {RequestUser, User} from "../types/Models/User";
 import {Class, RequestClass} from "../types/Models/Class";
 import {Timetable, TimeTableElement} from "../types/Models/Timetable";
+import {Classbook, RequestClassbookLesson} from "../types/Models/Classbook";
 
 const ORIGIN = process.env.NODE_ENV === "production" ? '/api' : 'https://localhost:5001';
 
@@ -133,7 +134,20 @@ export default class APIService extends RestService {
     /**
      * Gets the classbook for the currently logged in student
      */
-    public async getClassbookForCurrentUser(): Promise<any> {
-        return await this.get<any>(`${ORIGIN}/classbook`);
+    public async getClassbookForCurrentUser(): Promise<Classbook> {
+        return await this.get<Classbook>(`${ORIGIN}/classbook`);
+    }
+
+    /**
+     * Updates an existing classbook lesson
+     * 
+     * @param classID The ID of the class
+     * @param lesson The content of the lesson that should be updated
+     */
+    public async updateClassbookLesson(classID: string, lesson: RequestClassbookLesson): Promise<Classbook> {
+        return await this.post<Classbook>(`${ORIGIN}/classbook/updateLesson`, JSON.stringify({
+            id: classID,
+            lesson_to_update: lesson
+        }));
     }
 }

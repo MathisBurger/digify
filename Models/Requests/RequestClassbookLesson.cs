@@ -9,7 +9,6 @@ public class RequestClassbookLesson
     [JsonPropertyName("id")]
     public Guid Id { get; set; }
     
-    [Required]
     [JsonPropertyName("content")]
     public string Content { get; set; }
     

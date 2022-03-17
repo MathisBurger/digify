@@ -1,14 +1,19 @@
 ﻿import DataList from "../DataList/DataList";
-import {GridColDef} from "@mui/x-data-grid";
+import {GridCellEditCommitParams, GridColDef} from "@mui/x-data-grid";
 import {ClassbookDayEntryLesson} from "../../types/Models/Classbook";
+import useApiService from "../../hooks/useApiService";
+import useSnackbar from "../../hooks/useSnackbar";
 
 interface ClassbookTodayViewProps {
     lessons: ClassbookDayEntryLesson[];
+    classbookID: string;
     loading: boolean;
 }
 
-const ClassbookTodayView = ({lessons, loading}: ClassbookTodayViewProps) => {
+const ClassbookTodayView = ({lessons, loading, classbookID}: ClassbookTodayViewProps) => {
     
+    const apiService = useApiService();
+    const snackbar = useSnackbar();
     const columns: GridColDef[] = [
         {
           field: 'id',
@@ -53,10 +58,34 @@ const ClassbookTodayView = ({lessons, loading}: ClassbookTodayViewProps) => {
                         - ${new Date(row.endTime).getHours()}:${new Date(row.endTime).getMinutes()}`
         }
     ];
-    console.log(lessons);
+    
+    const updateLesson = async (e: GridCellEditCommitParams) => {
+        const lesson: any = lessons.filter(l => l.id === e.id)[0];
+        lesson[e.field] = e.value;
+        try {
+            const classbook = await apiService.updateClassbookLesson(classbookID, lesson);
+            if (snackbar.setSnackbar) snackbar.setSnackbar({color: "success", message: "Successfully updated lesson"});
+            snackbar.openSnackbar();
+            const days = classbook?.dayEntries?.filter(e => (new Date(e.currentDate)).getDate() === (new Date()).getDate());
+            if (days && days.length > 0) {
+                lessons = days[0].lessons ?? [];
+            }
+        } catch (e: any) {
+            if (snackbar.setSnackbar) snackbar.setSnackbar({color: "success", message: "Error while updating lesson"});
+            snackbar.openSnackbar();
+        }
+        
+    }
     
     return (
-      <DataList columns={columns} rows={lessons} loading={loading}  density="compact"/>
+      <DataList 
+          columns={columns} 
+          rows={lessons} 
+          loading={loading}  
+          density="compact" 
+          customID 
+          onCellEditCommit={(e) => updateLesson(e)}
+      />
     );
 }
 
