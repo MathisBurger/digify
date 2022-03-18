@@ -70,9 +70,9 @@ const TimetablePage = () => {
                     snackbar.setSnackbar({color: "success", message: "Successfully updated timetable"});
                     snackbar.openSnackbar();
                 }
-            } catch (e) {
+            } catch (e: any) {
                 if (snackbar.setSnackbar) {
-                    snackbar.setSnackbar({color: "error", message: "Cannot update timetable"});
+                    snackbar.setSnackbar({color: "error", message: e.message});
                     snackbar.openSnackbar();
                 }
             }
@@ -115,7 +115,7 @@ const TimetablePage = () => {
                                                 />
                                                 <ModifiedTreeItem
                                                     nodeId={`${day}-${element.start_time}-teacher`}
-                                                    label={`Teacher: ${element.teacher ? element.teacher.username: null}`}
+                                                    label={`Teacher: ${element.teacher ? element.teacher.username : null}`}
                                                 />
                                                 <ModifiedTreeItem
                                                     nodeId={`${day}-${element.start_time}-date`}

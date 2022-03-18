@@ -112,7 +112,7 @@ export default class APIService extends RestService {
             `${ORIGIN}/timetable/update/forUser`, 
             JSON.stringify({user_id: userId, request_table_elements: elements.map(e => ({
                     ...e, teacher: e.teacher ? e.teacher.id: ''}
-            ))})
+            ))}), true
         );
     }
 
@@ -127,7 +127,7 @@ export default class APIService extends RestService {
             `${ORIGIN}/timetable/update/forClass`,
             JSON.stringify({class_id: classId, request_table_elements: elements.map(e => ({
                         ...e, teacher: e.teacher ? e.teacher.id: ''}
-                ))})
+                ))}), true
         );
     }
 
@@ -148,6 +148,32 @@ export default class APIService extends RestService {
         return await this.post<Classbook>(`${ORIGIN}/classbook/updateLesson`, JSON.stringify({
             id: classID,
             lesson_to_update: lesson
+        }));
+    }
+
+    /**
+     * Adds a missing person to the current day entry
+     * 
+     * @param classbookID The ID of the classbook the missing user should be added to
+     * @param missingID The missing user that should be added
+     */
+    public async addMissingPersonToClassbook(classbookID: string, missingID: string): Promise<Classbook> {
+        return await this.post<Classbook>(`${ORIGIN}/classbook/addMissing`, JSON.stringify({
+            classbook_id: classbookID,
+            missing_id: missingID
+        }));
+    }
+
+    /**
+     * Removes a missing person from the current day entry in classbook
+     * 
+     * @param classbookID The ID of the classbook that the user should be added to
+     * @param missingID The ID of the missing student that should be removed.
+     */
+    public async removeMissingPersonFromClassbook(classbookID: string, missingID: string): Promise<Classbook> {
+        return await this.delete<Classbook>(`${ORIGIN}/classbook/removeMissing`, JSON.stringify({
+            classbook_id: classbookID,
+            missing_id: missingID
         }));
     }
 }

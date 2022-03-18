@@ -22,7 +22,12 @@ public class TimetableResponse
         var fetched = await Db.Timetables.Include(t => t.TableElements)
             .Where(t => t.Id == unparsed.Id)
             .FirstOrDefaultAsync();
+        var elements = await Db.TimeTableElements
+            .Include(e => e.Teacher)
+            .Where(e => e.Parent.Id == unparsed.Id)
+            .ToListAsync();
         if (fetched == null) throw new Exception("Timetable not found");
+        fetched.TableElements = elements;
         return fetched;
     }
 }

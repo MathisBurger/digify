@@ -103,8 +103,9 @@ public class ClassbookService
             throw new Exception("The requested user is not an student or does not exist");
         }
 
-        var todayEntry = classbook.DayEntries
-            .FirstOrDefault(e => e.CurrentDate.DayOfYear == new DateTime().DayOfYear);
+        var todayEntry = await Db.ClassbookDayEntries
+            .FirstOrDefaultAsync(e => e.CurrentDate.DayOfYear == DateTime.Today.DayOfYear 
+                                 && e.ParentClassbook.Id == classbookID);
         if (todayEntry == null) throw new Exception("There is no entry existing for the current day");
         if (todayEntry.Missing.FirstOrDefault(u => u.Id == missingID) != null)
         {
@@ -129,9 +130,11 @@ public class ClassbookService
             throw new Exception("The requested user is not an student or does not exist");
         }
 
-        var todayEntry = classbook.DayEntries
-            .FirstOrDefault(e => e.CurrentDate.DayOfYear == new DateTime().DayOfYear);
-        if (todayEntry == null) throw new Exception("There is no entry existing for the current day");
+        var todayEntry = await Db.ClassbookDayEntries
+            .Include(e => e.Missing)
+            .FirstOrDefaultAsync(e => e.CurrentDate.DayOfYear == DateTime.Today.DayOfYear 
+                                      && e.ParentClassbook.Id == classbookID);
+        if (todayEntry == null) throw new Exception("There is no entry existing for the current day entry");
         if (todayEntry.Missing.FirstOrDefault(u => u.Id == missingID) == null)
         {
             throw new Exception("User is not missing today");

@@ -41,6 +41,7 @@ public class UserVoter : IVoter
         switch (action)
         {
             case ALL_USERS:
+                return true;
             case CREATE_USER:
             case DELETE_USER:    
                 return UserCanCreateUser();

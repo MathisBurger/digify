@@ -1,4 +1,5 @@
 ﻿import {User} from "./User";
+import {Class} from "./Class";
 
 export interface Classbook {
     archived: boolean;
@@ -8,6 +9,7 @@ export interface Classbook {
     dayEntries: ClassbookDayEntry[];
     id: string;
     year: string;
+    referedClass: Class;
 }
 
 export interface ClassbookDayEntry {

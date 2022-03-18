@@ -70,8 +70,9 @@ export default class RestService {
      * The general DELETE request.
      * 
      * @param path The path to the REST endopint.
+     * @param body The body of the delete request
      */
-    protected async delete<T>(path: string): Promise<T> {
-        return await RestService.fetchEndpoint<T>("DELETE", path);
+    protected async delete<T>(path: string, body?: any): Promise<T> {
+        return await RestService.fetchEndpoint<T>("DELETE", path, body);
     }
 }

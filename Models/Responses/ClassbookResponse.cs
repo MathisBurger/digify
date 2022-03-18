@@ -27,6 +27,7 @@ public class ClassbookResponse
         {
             var entry = (await Db.ClassbookDayEntries
                 .Include(e => e.Lessons)
+                .Include(e => e.Missing)
                 .Where(e => e.Id == classbookDayEntry.Id)
                 .FirstOrDefaultAsync())!;
             var lessons = new List<ClassbookDayEntryLesson>();
