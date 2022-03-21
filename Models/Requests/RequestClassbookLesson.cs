@@ -13,6 +13,6 @@ public class RequestClassbookLesson
     public string Content { get; set; }
     
     [Required]
-    [JsonPropertyName("approved_by_teacher")]
+    [JsonPropertyName("ApprovedByTeacher")]
     public bool ApprovedByTeacher { get; set; }
 }
