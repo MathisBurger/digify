@@ -41,7 +41,7 @@ public class TimetableController : AuthorizedControllerBase
     {
         var user = (await Db.Users.FindAsync(AuthorizedUser.Id))!;
         user.Timetable = (await Db.Timetables.Where(t => t.OwningUser.Id == user.Id).FirstOrDefaultAsync())!;
-        if (user.Roles.Contains(UserRoles.STUDENT))
+        if (Authorization.IsGranted(user, TimetableVoter.READ, new TimetableVoter()))
         {
             return Ok(await (new TimetableResponse(Db).FetchTimetable(user.Timetable!)));
         }
@@ -56,7 +56,8 @@ public class TimetableController : AuthorizedControllerBase
         [FromQuery(Name = "class_id")] Guid? classId
         ) {
         
-        if (!AuthorizedUser.Roles.Contains(UserRoles.ADMIN)) return Unauthorized();
+        if (!Authorization.IsGranted(AuthorizedUser, TimetableVoter.ACTION_READ, new TimetableVoter()))
+            return Unauthorized();
         
         if (userId != null)
         {
@@ -87,7 +88,7 @@ public class TimetableController : AuthorizedControllerBase
     public async Task<ActionResult<Timetable>> CreateTimetableForUser([FromBody] TimetableManagementRequest request)
     {
         if (
-            !AuthorizedUser.Roles.Contains(UserRoles.ADMIN) 
+            !Authorization.IsGranted(AuthorizedUser, TimetableVoter.CREATE, new TimetableVoter())
             || request.UserId == null 
             || request.RequestTableElements == null
             ) {
@@ -112,7 +113,7 @@ public class TimetableController : AuthorizedControllerBase
     public async Task<ActionResult> DeleteTimetableForUser([FromBody] TimetableManagementRequest request)
     {
         if (
-            !AuthorizedUser.Roles.Contains(UserRoles.ADMIN) 
+            !Authorization.IsGranted(AuthorizedUser, TimetableVoter.DELETE, new TimetableVoter())
             || request.UserId == null
         ) {
             return Unauthorized();
@@ -139,6 +140,9 @@ public class TimetableController : AuthorizedControllerBase
         {
             return BadRequest();
         }
+
+        if (!Authorization.IsGranted(AuthorizedUser, TimetableVoter.UPDATE, new TimetableVoter()))
+            return Unauthorized();
         var user = await Db.Users.FindAsync(request.UserId);
         if (user == null)
         {
@@ -153,7 +157,7 @@ public class TimetableController : AuthorizedControllerBase
     public async Task<ActionResult<Timetable>> CreateTimetableForClass([FromBody] TimetableManagementRequest request)
     {
         if (
-            !AuthorizedUser.Roles.Contains(UserRoles.ADMIN) 
+            !Authorization.IsGranted(AuthorizedUser, TimetableVoter.UPDATE, new TimetableVoter())
             || request.ClassId == null 
             || request.RequestTableElements == null
         ) {
@@ -178,7 +182,7 @@ public class TimetableController : AuthorizedControllerBase
     public async Task<ActionResult> DeleteTimetableForClass([FromBody] TimetableManagementRequest request)
     {
         if (
-            !AuthorizedUser.Roles.Contains(UserRoles.ADMIN) 
+            !Authorization.IsGranted(AuthorizedUser, TimetableVoter.UPDATE, new TimetableVoter())
             || request.ClassId == null
         ) {
             return Unauthorized();
@@ -205,6 +209,8 @@ public class TimetableController : AuthorizedControllerBase
         {
             return BadRequest("Invalid request params");
         }
+        if (!Authorization.IsGranted(AuthorizedUser, TimetableVoter.UPDATE, new TimetableVoter()))
+            return Unauthorized();
         var fetchedClass = await Db.Classes.FindAsync(request.ClassId);
         if (fetchedClass == null)
         {
