@@ -6,6 +6,7 @@ import {Grid} from "@mui/material";
 import ClassbookTodayView from "./ClassbookTodayView";
 import {Classbook} from "../../types/Models/Classbook";
 import ClassbookMissingView from "./ClassbookMissingView";
+import ClassbookDayEntryNotes from "./ClassbookDayEntryNotes";
 
 
 const ClassbookDisplay = () => {
@@ -38,6 +39,14 @@ const ClassbookDisplay = () => {
         }
         return [];
     }
+
+    const getCurrentDayNotes = () => {
+        const days = classbook?.dayEntries?.filter(e => (new Date(e.currentDate)).getDate() === (new Date()).getDate());
+        if (days && days.length > 0) {
+            return days[0].notes ?? '';
+        }
+        return '';
+    }
     
     return (
         <Grid container direction="row" spacing={2}>
@@ -55,6 +64,9 @@ const ClassbookDisplay = () => {
                     classbookID={classbook?.id ?? ''}
                     setClassbook={(cb: Classbook) => setClassbook(cb)}
                 />
+            </Grid>
+            <Grid item xs={3}>
+                <ClassbookDayEntryNotes notes={getCurrentDayNotes()}  classbookID={classbook?.id ?? ''} />
             </Grid>
         </Grid>
     );

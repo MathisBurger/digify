@@ -176,4 +176,17 @@ export default class APIService extends RestService {
             missing_id: missingID
         }));
     }
+
+    /**
+     * Updates the notes of the current day entry
+     * 
+     * @param classbookID The ID of the classbook, that contains the day entry
+     * @param notes
+     */
+    public async updateNotes(classbookID: string, notes: string): Promise<Classbook> {
+        return await this.post<Classbook>(`${ORIGIN}/classbook/updateNotes`, JSON.stringify({
+            id: classbookID,
+            notes: notes
+        }));
+    }
 }

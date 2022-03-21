@@ -11,4 +11,7 @@ public class ClassbookUpdateRequest
     
     [JsonPropertyName("lesson_to_update")]
     public RequestClassbookLesson? LessonToUpdate { get; set; }
+    
+    [JsonPropertyName("notes")]
+    public string? Notes { get; set; }
 }

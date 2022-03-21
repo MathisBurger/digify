@@ -93,5 +93,24 @@ public class ClassbookController : AuthorizedControllerBase
         lesson.ApprovedByTeacher = request.ApprovedByTeacher;
         return lesson;
     }
-    
+
+
+    [HttpPost("/classbook/updateNotes")]
+    [TypeFilter(typeof(RequiresAuthorization))]
+    public async Task<ActionResult<Classbook>> UpdateNotes([FromBody] ClassbookUpdateRequest request)
+    {
+        if (request.Notes == null)
+        {
+            return BadRequest();
+        }
+
+        var dayEntry = await Db.ClassbookDayEntries
+            .Where(e => e.ParentClassbook.Id == request.Id && e.CurrentDate.DayOfYear == DateTime.Now.DayOfYear)
+            .FirstOrDefaultAsync();
+        if (dayEntry == null) return BadRequest();
+        dayEntry.Notes = request.Notes;
+        Db.ClassbookDayEntries.Update(dayEntry);
+        await Db.SaveChangesAsync();
+        return (await new ClassbookResponse(Db).ParseSingle(await Db.Classbooks.FindAsync(request.Id)))!;
+    }
 }
