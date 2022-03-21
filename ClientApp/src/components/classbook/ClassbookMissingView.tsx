@@ -50,15 +50,17 @@ const ClassbookMissingView = ({missingStudents, students, classbookID, setClassb
                     </ListItem>
                 </List>
             </Card>
-            <Menu
-                anchorEl={anchorEl}
-                open={dropdownOpen}
-                onClose={() => setAnchorEl(null)}
-            >
-                {unaddedStudents.map(s => (
-                    <MenuItem onClick={() => addUsertoMissingList(s.id)}>{s.username}</MenuItem>
-                ))}
-            </Menu>
+            {unaddedStudents.length > 0 ? (
+                <Menu
+                    anchorEl={anchorEl}
+                    open={dropdownOpen}
+                    onClose={() => setAnchorEl(null)}
+                >
+                    {unaddedStudents.map(s => (
+                        <MenuItem onClick={() => addUsertoMissingList(s.id)}>{s.username}</MenuItem>
+                    ))}
+                </Menu>
+            ) : null}
             {removeUser !== null ? (
                 <MissingUserClickedDialog
                     close={() => setRemoveUser(null)}
