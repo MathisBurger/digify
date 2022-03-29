@@ -70,6 +70,8 @@ public class Startup
             endpoints.MapControllers();
         });
 
+        app.UseStaticFiles();
+
         using (var scope = app.ApplicationServices.CreateScope())
         using (var db = scope.ServiceProvider.GetService<IContext>()!)
         {

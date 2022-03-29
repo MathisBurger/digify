@@ -31,7 +31,7 @@ public class ClassController : AuthorizedControllerBase
     /// Fetches all classes that the current logged
     /// in user has access to.
     /// </summary>
-    [HttpGet("/class/getAllClasses")]
+    [HttpGet("/api/class/getAllClasses")]
     [TypeFilter(typeof(RequiresAuthorization))]
     public async Task<ActionResult<List<Class>>> GetAllClasses()
     {
@@ -57,7 +57,7 @@ public class ClassController : AuthorizedControllerBase
     /// Fetches a specific class from the database
     /// </summary>
     /// <param name="id">The id of the class</param>
-    [HttpGet("/class/{id}")]
+    [HttpGet("/api/class/{id}")]
     [TypeFilter(typeof(RequiresAuthorization))]
     public async Task<ActionResult<Class>> GetClass([FromRoute] Guid id)
     {
@@ -73,7 +73,7 @@ public class ClassController : AuthorizedControllerBase
     /// <summary>
     /// Creates a new class.
     /// </summary>
-    [HttpPost("/class/createClass")]
+    [HttpPost("/api/class/createClass")]
     [TypeFilter(typeof(RequiresAuthorization))]
     public async Task<ActionResult<Class>> CreateClass([FromBody] CreateClass request)
     {
@@ -122,7 +122,7 @@ public class ClassController : AuthorizedControllerBase
     /// Deletes a class from the system
     /// </summary>
     /// <param name="id">The ID of the class that should be deleted</param>
-    [HttpDelete("/class/deleteClass/{id}")]
+    [HttpDelete("/api/class/deleteClass/{id}")]
     [TypeFilter(typeof(RequiresAuthorization))]
     public async Task<ActionResult> DeleteClass([FromRoute] Guid id)
     {

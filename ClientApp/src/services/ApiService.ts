@@ -4,7 +4,7 @@ import {Class, RequestClass} from "../types/Models/Class";
 import {Timetable, TimeTableElement} from "../types/Models/Timetable";
 import {Classbook, RequestClassbookLesson} from "../types/Models/Classbook";
 
-const ORIGIN = process.env.NODE_ENV === "production" ? '/api' : 'https://localhost:5001';
+const ORIGIN = process.env.NODE_ENV === "production" ? '/api' : 'https://localhost:5001/api';
 
 /**
  * General API service that wraps all methods into functions

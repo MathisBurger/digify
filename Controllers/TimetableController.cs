@@ -35,7 +35,7 @@ public class TimetableController : AuthorizedControllerBase
     /// Gets the current timetable of the user
     /// </summary>
     /// <returns>The current timetable of the user</returns>
-    [HttpGet("/timetable/get")]
+    [HttpGet("/api/timetable/get")]
     [TypeFilter(typeof(RequiresAuthorization))]
     public async Task<ActionResult<Timetable>> GetTimetable()
     {
@@ -52,7 +52,7 @@ public class TimetableController : AuthorizedControllerBase
     /// <summary>
     /// Gets a timetable for a specific user or class
     /// </summary>
-    [HttpGet("/timetable/actionGet")]
+    [HttpGet("/api/timetable/actionGet")]
     [TypeFilter(typeof(RequiresAuthorization))]
     public async Task<ActionResult<Timetable>> GetTimetableForGroup(
         [FromQuery(Name = "user_id")] Guid? userId,
@@ -89,7 +89,7 @@ public class TimetableController : AuthorizedControllerBase
     /// <summary>
     /// Creates a timetable for a specific user
     /// </summary>
-    [HttpPost("/timetable/create/forUser")]
+    [HttpPost("/api/timetable/create/forUser")]
     [TypeFilter(typeof(RequiresAuthorization))]
     public async Task<ActionResult<Timetable>> CreateTimetableForUser([FromBody] TimetableManagementRequest request)
     {
@@ -117,7 +117,7 @@ public class TimetableController : AuthorizedControllerBase
     /// <summary>
     /// Deletes a timetable for a specific user
     /// </summary>
-    [HttpDelete("/timetable/delete/forUser")]
+    [HttpDelete("/api/timetable/delete/forUser")]
     [TypeFilter(typeof(RequiresAuthorization))]
     public async Task<ActionResult> DeleteTimetableForUser([FromBody] TimetableManagementRequest request)
     {
@@ -144,7 +144,7 @@ public class TimetableController : AuthorizedControllerBase
     /// <summary>
     /// Updates the timetable for a specific user
     /// </summary>
-    [HttpPost("/timetable/update/forUser")]
+    [HttpPost("/api/timetable/update/forUser")]
     [TypeFilter(typeof(RequiresAuthorization))]
     public async Task<ActionResult<Timetable>> UpdateTimetableForUser([FromBody] TimetableManagementRequest request)
     {
@@ -167,7 +167,7 @@ public class TimetableController : AuthorizedControllerBase
     /// <summary>
     /// Creates a timetable for a specific class
     /// </summary>
-    [HttpPost("/timetable/create/forClass")]
+    [HttpPost("/api/timetable/create/forClass")]
     [TypeFilter(typeof(RequiresAuthorization))]
     public async Task<ActionResult<Timetable>> CreateTimetableForClass([FromBody] TimetableManagementRequest request)
     {
@@ -195,7 +195,7 @@ public class TimetableController : AuthorizedControllerBase
     /// <summary>
     /// Deletes a specific timetable for a class
     /// </summary>
-    [HttpDelete("/timetable/delete/forClass")]
+    [HttpDelete("/api/timetable/delete/forClass")]
     [TypeFilter(typeof(RequiresAuthorization))]
     public async Task<ActionResult> DeleteTimetableForClass([FromBody] TimetableManagementRequest request)
     {
@@ -222,7 +222,7 @@ public class TimetableController : AuthorizedControllerBase
     /// <summary>
     /// Updates a specific timetable for a class
     /// </summary>
-    [HttpPost("/timetable/update/forClass")]
+    [HttpPost("/api/timetable/update/forClass")]
     [TypeFilter(typeof(RequiresAuthorization))]
     public async Task<ActionResult> UpdateTimetableForClass([FromBody] TimetableManagementRequest request)
     {

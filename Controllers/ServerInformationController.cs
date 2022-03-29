@@ -13,7 +13,7 @@ public class ServerInformationController : ControllerBase
     /// <summary>
     /// Returns all important server information
     /// </summary>
-    [HttpGet("/")]
+    [HttpGet("/api")]
     public IActionResult ServerInformation()
     {
         return Ok(new ServerInformation("v1"));

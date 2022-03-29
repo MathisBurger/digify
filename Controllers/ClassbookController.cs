@@ -33,7 +33,7 @@ public class ClassbookController : AuthorizedControllerBase
     /// <summary>
     /// Fetches the classbook of the current logged-in student
     /// </summary>
-    [HttpGet("/classbook")]
+    [HttpGet("/api/classbook")]
     [TypeFilter(typeof(RequiresAuthorization))]
     public async Task<ActionResult<Classbook>> GetClassbookOfCurrentUser()
     {
@@ -48,7 +48,7 @@ public class ClassbookController : AuthorizedControllerBase
     /// <summary>
     /// Updates a specific lesson of the current day entry
     /// </summary>
-    [HttpPost("/classbook/updateLesson")]
+    [HttpPost("/api/classbook/updateLesson")]
     [TypeFilter(typeof(RequiresAuthorization))]
     public async Task<ActionResult<Classbook>> UpdateClassbookLessonForClass([FromBody] ClassbookUpdateRequest request)
     {
@@ -84,7 +84,7 @@ public class ClassbookController : AuthorizedControllerBase
     /// <summary>
     /// Adds a student to the missing list of the current day entry
     /// </summary>
-    [HttpPost("/classbook/addMissing")]
+    [HttpPost("/api/classbook/addMissing")]
     [TypeFilter(typeof(RequiresAuthorization))]
     public async Task<ActionResult<Classbook>> AddMissingPerson([FromBody] ClassbookMissingRequest request)
     {
@@ -99,7 +99,7 @@ public class ClassbookController : AuthorizedControllerBase
     /// <summary>
     /// Removes a student from the missing list of the current day entry
     /// </summary>
-    [HttpDelete("/classbook/removeMissing")]
+    [HttpDelete("/api/classbook/removeMissing")]
     [TypeFilter(typeof(RequiresAuthorization))]
     public async Task<ActionResult<Classbook>> RemoveMissingPerson([FromBody] ClassbookMissingRequest request)
     {
@@ -126,7 +126,7 @@ public class ClassbookController : AuthorizedControllerBase
     /// <summary>
     /// Updates the notes of the current day entry
     /// </summary>
-    [HttpPost("/classbook/updateNotes")]
+    [HttpPost("/api/classbook/updateNotes")]
     [TypeFilter(typeof(RequiresAuthorization))]
     public async Task<ActionResult<Classbook>> UpdateNotes([FromBody] ClassbookUpdateRequest request)
     {

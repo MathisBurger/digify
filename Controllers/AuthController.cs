@@ -33,7 +33,7 @@ public class AuthController : ControllerBase
     /// </summary>
     /// <param name="creds">The login credentials</param>
     /// <returns>The http response that indicates the login status</returns>
-    [HttpPost("/auth/login")]
+    [HttpPost("/api/auth/login")]
     public async Task<ActionResult> Login([FromBody] AuthCredentials creds)
     {
         var user = await Db.Users.Where(u => u.Username == creds.LoginName).FirstOrDefaultAsync();

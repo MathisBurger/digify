@@ -29,14 +29,14 @@ public class UserController : AuthorizedControllerBase
     /// <summary>
     /// Returns the current logged in user
     /// </summary>
-    [HttpGet("/user/me")]
+    [HttpGet("/api/user/me")]
     [TypeFilter(typeof(RequiresAuthorization))]
     public ActionResult<User> Me() => Ok(AuthorizedUser);
 
     /// <summary>
     /// Creates a new user.
     /// </summary>
-    [HttpPost("/user/create")]
+    [HttpPost("/api/user/create")]
     [TypeFilter(typeof(RequiresAuthorization))]
     public async Task<ActionResult<User>> CreateUser([FromBody] CreateUser request)
     {
@@ -60,7 +60,7 @@ public class UserController : AuthorizedControllerBase
     /// <summary>
     /// Fetches all users.
     /// </summary>
-    [HttpGet("/user/allUsers")]
+    [HttpGet("/api/user/allUsers")]
     [TypeFilter(typeof(RequiresAuthorization))]
     public ActionResult<List<User>> AllUsers()
     {
@@ -77,7 +77,7 @@ public class UserController : AuthorizedControllerBase
     /// Deletes a user from the system
     /// </summary>
     /// <param name="id">The ID of the user that should be deleted</param>
-    [HttpDelete("/user/delete/{id}")]
+    [HttpDelete("/api/user/delete/{id}")]
     [TypeFilter(typeof(RequiresAuthorization))]
     public async Task<ActionResult> DeleteUser([FromRoute] Guid id)
     {
