@@ -3,6 +3,9 @@ using digify.Modules;
 
 namespace digify.Shared;
 
+/// <summary>
+/// Loads all fixtures in the system
+/// </summary>
 public class FixtureLoader : IFixtureLoader
 {
     private readonly ILogger<FixtureLoader> Logger;
@@ -14,6 +17,10 @@ public class FixtureLoader : IFixtureLoader
         Hasher = _hasher;
     }
     
+    /// <summary>
+    /// Loads all fixtures
+    /// </summary>
+    /// <param name="context">The database context</param>
     public async Task Load(IContext context)
     {
         var userFixture = new UserFixture(context, Hasher);

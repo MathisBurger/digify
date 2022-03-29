@@ -5,6 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace digify.Shared;
 
+/// <summary>
+/// Core database context used for communication with the postgreSQL server.
+/// </summary>
 public class DatabaseContext : DbContext, IContext
 {
     public DbSet<User> Users { get; set; }
@@ -18,6 +21,7 @@ public class DatabaseContext : DbContext, IContext
     public DatabaseContext(DbContextOptions options) : base(options)
     { }
 
+    /// <inheritdoc />
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
