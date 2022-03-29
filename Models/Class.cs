@@ -22,6 +22,9 @@ public class Class : Entity
     [InverseProperty("Classes")]
     public ICollection<User> Teachers { get; set; }
     
+    /// <summary>
+    /// The classbook of the class
+    /// </summary>
     [InverseProperty("ReferedClass")]
     public Classbook Classbook { get; set; }
 

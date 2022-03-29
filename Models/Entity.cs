@@ -3,6 +3,9 @@ using System.Text.Json.Serialization;
 
 namespace digify.Models;
 
+/// <summary>
+/// Base entity that all other entities depend on
+/// </summary>
 public class Entity
 {
     /// <summary>

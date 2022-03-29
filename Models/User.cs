@@ -4,6 +4,9 @@ using System.Text.Json.Serialization;
 
 namespace digify.Models;
 
+/// <summary>
+/// The user entity that can log in into the webpage
+/// </summary>
 public class User: Entity
 {
     /// <summary>
@@ -36,9 +39,15 @@ public class User: Entity
     [InverseProperty("Teachers")]
     public ICollection<Class> Classes { get; set; }
     
+    /// <summary>
+    /// The timetable that is assigned to the user
+    /// </summary>
     [InverseProperty("OwningUser")]
     public Timetable? Timetable { get; set; }
     
+    /// <summary>
+    /// All days that the student was not in school
+    /// </summary>
     [InverseProperty("Missing")]
     public ICollection<ClassbookDayEntry> MissedDays { get; set; }
 
