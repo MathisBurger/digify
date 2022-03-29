@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace digify.Models.Responses;
 
+/// <summary>
+/// Response pattern that fetches all relations of a classbook
+/// </summary>
 public class ClassbookResponse
 {
     
@@ -13,6 +16,11 @@ public class ClassbookResponse
         Db = db;
     }
 
+    /// <summary>
+    /// Fetches all relations of a single classbook
+    /// </summary>
+    /// <param name="classbook">The unfetched classbook</param>
+    /// <returns>The classbook with all relations fetched</returns>
     public async Task<Classbook?> ParseSingle(Classbook? classbook)
     {
         if (classbook == null) return null;

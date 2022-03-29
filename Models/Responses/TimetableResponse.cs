@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace digify.Models.Responses;
 
+/// <summary>
+/// Response patttern with multiple fetching methods for displaying a timetable
+/// </summary>
 public class TimetableResponse
 {
     private readonly IContext Db;
