@@ -30,6 +30,9 @@ public class ClassbookController : AuthorizedControllerBase
         ClassbookService = new ClassbookService(_db, logger);
     }
 
+    /// <summary>
+    /// Fetches the classbook of the current logged-in student
+    /// </summary>
     [HttpGet("/classbook")]
     [TypeFilter(typeof(RequiresAuthorization))]
     public async Task<ActionResult<Classbook>> GetClassbookOfCurrentUser()
@@ -42,6 +45,9 @@ public class ClassbookController : AuthorizedControllerBase
         return Ok(await new ClassbookResponse(Db).ParseSingle(await ClassbookService.GetClassbookByStudent(AuthorizedUser)));
     }
     
+    /// <summary>
+    /// Updates a specific lesson of the current day entry
+    /// </summary>
     [HttpPost("/classbook/updateLesson")]
     [TypeFilter(typeof(RequiresAuthorization))]
     public async Task<ActionResult<Classbook>> UpdateClassbookLessonForClass([FromBody] ClassbookUpdateRequest request)
@@ -75,6 +81,9 @@ public class ClassbookController : AuthorizedControllerBase
         return (await new ClassbookResponse(Db).ParseSingle(classbook))!;
     }
 
+    /// <summary>
+    /// Adds a student to the missing list of the current day entry
+    /// </summary>
     [HttpPost("/classbook/addMissing")]
     [TypeFilter(typeof(RequiresAuthorization))]
     public async Task<ActionResult<Classbook>> AddMissingPerson([FromBody] ClassbookMissingRequest request)
@@ -87,6 +96,9 @@ public class ClassbookController : AuthorizedControllerBase
         return (await new ClassbookResponse(Db).ParseSingle(await Db.Classbooks.FindAsync(request.ClassbookId)))!;
     }
 
+    /// <summary>
+    /// Removes a student from the missing list of the current day entry
+    /// </summary>
     [HttpDelete("/classbook/removeMissing")]
     [TypeFilter(typeof(RequiresAuthorization))]
     public async Task<ActionResult<Classbook>> RemoveMissingPerson([FromBody] ClassbookMissingRequest request)
@@ -99,6 +111,9 @@ public class ClassbookController : AuthorizedControllerBase
         return (await new ClassbookResponse(Db).ParseSingle(await Db.Classbooks.FindAsync(request.ClassbookId)))!;
     }
 
+    /// <summary>
+    /// Updates a lesson of the request without flushing the data into the database
+    /// </summary>
     private ClassbookDayEntryLesson UpdateLessonOfRequestWithoutSaving(ClassbookDayEntryLesson lesson,
         RequestClassbookLesson request)
     {
@@ -108,6 +123,9 @@ public class ClassbookController : AuthorizedControllerBase
     }
 
 
+    /// <summary>
+    /// Updates the notes of the current day entry
+    /// </summary>
     [HttpPost("/classbook/updateNotes")]
     [TypeFilter(typeof(RequiresAuthorization))]
     public async Task<ActionResult<Classbook>> UpdateNotes([FromBody] ClassbookUpdateRequest request)
