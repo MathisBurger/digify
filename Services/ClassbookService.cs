@@ -4,6 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace digify.Services;
 
+/// <summary>
+/// Handles basic calculations and updates on a classbook
+/// </summary>
 public class ClassbookService
 {
     private readonly IContext Db;
@@ -17,6 +20,12 @@ public class ClassbookService
         Logger = logger;
     }
 
+    /// <summary>
+    /// Creates a new day entry on the classbook
+    /// </summary>
+    /// <param name="classbook">The classbook that the day entry should be created on</param>
+    /// <param name="dateTime">The date that should be fetched</param>
+    /// <returns>The classbook day entry of the fetched day</returns>
     public async Task<ClassbookDayEntry> CreateDayEntry(Classbook classbook, DateTime dateTime)
     {
         var entry = new ClassbookDayEntry();
@@ -48,6 +57,11 @@ public class ClassbookService
         return entry;
     }
 
+    /// <summary>
+    /// Formats timetable events to classbook day entry lessons.
+    /// </summary>
+    /// <param name="element">The element that should be parsed</param>
+    /// <returns>The parsed lesson</returns>
     private ClassbookDayEntryLesson FormatTimetableEventToClassbookDayEntryLesson(TimeTableElement element)
     {
         var entry = new ClassbookDayEntryLesson();
@@ -60,6 +74,12 @@ public class ClassbookService
         return entry;
     }
     
+    /// <summary>
+    /// Gets a specific classbook by a student
+    /// </summary>
+    /// <param name="user">The user that owns the classbook</param>
+    /// <returns>The classbook of the student</returns>
+    /// <exception cref="Exception">If an error occurs while fetching</exception>
     public async Task<Classbook> GetClassbookByStudent(User user)
     {
         var fetchedUser = (await Db.Users.FindAsync(user.Id));
@@ -90,6 +110,13 @@ public class ClassbookService
         return classbook!;
     }
 
+    /// <summary>
+    /// Adds a missing person to the current day entry
+    /// </summary>
+    /// <param name="classbookID">The ID of the classbook</param>
+    /// <param name="missingID">The ID of the missing student</param>
+    /// <returns>The updated day entry</returns>
+    /// <exception cref="Exception">If an error occurs while updating</exception>
     public async Task<ClassbookDayEntry> AddMissingPerson(Guid classbookID, Guid missingID)
     {
         var classbook = await Db.Classbooks
@@ -117,6 +144,13 @@ public class ClassbookService
         return todayEntry;
     }
     
+    /// <summary>
+    /// Removes a missing person from the classbook 
+    /// </summary>
+    /// <param name="classbookID">The ID of the classbook</param>
+    /// <param name="missingID">The ID of the missing student</param>
+    /// <returns>The updated day entry</returns>
+    /// <exception cref="Exception">If an error occurs while updating</exception>
     public async Task<ClassbookDayEntry> RemoveMissingPerson(Guid classbookID, Guid missingID)
     {
         var classbook = await Db.Classbooks
