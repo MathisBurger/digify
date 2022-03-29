@@ -1,4 +1,5 @@
-﻿using digify.Filters;
+﻿using digify.AccessVoter;
+using digify.Filters;
 using digify.Models;
 using digify.Models.Requests;
 using digify.Models.Responses;
@@ -33,7 +34,7 @@ public class ClassbookController : AuthorizedControllerBase
     [TypeFilter(typeof(RequiresAuthorization))]
     public async Task<ActionResult<Classbook>> GetClassbookOfCurrentUser()
     {
-        if (!AuthorizedUser.Roles.Contains(UserRoles.STUDENT))
+        if (!Authorization.IsGranted(AuthorizedUser, ClassbookVoter.GET_OWN_CLASSBOOK, new ClassbookVoter(Db)))
         {
             return BadRequest("You do not own any classbook, because you are not a member of a class");
         }
@@ -45,6 +46,10 @@ public class ClassbookController : AuthorizedControllerBase
     [TypeFilter(typeof(RequiresAuthorization))]
     public async Task<ActionResult<Classbook>> UpdateClassbookLessonForClass([FromBody] ClassbookUpdateRequest request)
     {
+        if (!Authorization.IsGranted(AuthorizedUser, ClassbookVoter.UPDATE_LESSON, new ClassbookVoter(Db)))
+        {
+            return Unauthorized();
+        }
         if (request.LessonToUpdate == null 
             || (request.LessonToUpdate.Content == String.Empty && request.LessonToUpdate.Content != ""))
         {
@@ -74,6 +79,10 @@ public class ClassbookController : AuthorizedControllerBase
     [TypeFilter(typeof(RequiresAuthorization))]
     public async Task<ActionResult<Classbook>> AddMissingPerson([FromBody] ClassbookMissingRequest request)
     {
+        if (!Authorization.IsGranted(AuthorizedUser, ClassbookVoter.ADD_MISSING_PERSON, new ClassbookVoter(Db)))
+        {
+            return Unauthorized();
+        }
         await ClassbookService.AddMissingPerson(request.ClassbookId, request.MissingId);
         return (await new ClassbookResponse(Db).ParseSingle(await Db.Classbooks.FindAsync(request.ClassbookId)))!;
     }
@@ -82,6 +91,10 @@ public class ClassbookController : AuthorizedControllerBase
     [TypeFilter(typeof(RequiresAuthorization))]
     public async Task<ActionResult<Classbook>> RemoveMissingPerson([FromBody] ClassbookMissingRequest request)
     {
+        if (!Authorization.IsGranted(AuthorizedUser, ClassbookVoter.REMOVE_MISSING_PERSON, new ClassbookVoter(Db)))
+        {
+            return Unauthorized();
+        }
         await ClassbookService.RemoveMissingPerson(request.ClassbookId, request.MissingId);
         return (await new ClassbookResponse(Db).ParseSingle(await Db.Classbooks.FindAsync(request.ClassbookId)))!;
     }
@@ -99,6 +112,10 @@ public class ClassbookController : AuthorizedControllerBase
     [TypeFilter(typeof(RequiresAuthorization))]
     public async Task<ActionResult<Classbook>> UpdateNotes([FromBody] ClassbookUpdateRequest request)
     {
+        if (!Authorization.IsGranted(AuthorizedUser, ClassbookVoter.UPDATE_NOTES, new ClassbookVoter(Db)))
+        {
+            return Unauthorized();
+        }
         if (request.Notes == null)
         {
             return BadRequest();
