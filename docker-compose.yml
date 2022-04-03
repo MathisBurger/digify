@@ -1,0 +1,26 @@
+version: '3'
+
+volumes:
+  postgres:
+
+services:
+  postgres:
+    image: "postgres:13-alpine"
+    volumes:
+      - "postgres:/var/lib/postgresql/data"
+    environment:
+      POSTGRES_USER: "digify"
+      POSTGRES_PASSWORD: "digify_pw"
+    restart: always
+
+  backend:
+    depends_on:
+      - postgres
+    image: "ghcr.io/mathisburger/digify"
+    expose:
+      - "80"
+    ports:
+      - "80:80"
+    environment:
+      DATABASE_STRING: "Host=postgres;Database=digify;Username=digify;Password=digify_pw;IncludeErrorDetail=true"
+    restart: on-failure
