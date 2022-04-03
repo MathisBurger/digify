@@ -6,8 +6,8 @@ EXPOSE 443
 FROM node:alpine AS node_base
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 
-COPY --from=node_base . .
 WORKDIR /src
+COPY --from=node_base . .
 COPY "digify.csproj" . 
 RUN dotnet restore "digify.csproj"
 COPY . .
