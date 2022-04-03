@@ -3,14 +3,10 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
+FROM node:alpine AS node_base
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 
-ENV APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1
-RUN apt-get update -yq 
-RUN apt-get install curl gnupg -yq 
-RUN curl -sL https://deb.nodesource.com/setup_13.x | bash -
-RUN apt-get install -y nodejs
-
+COPY --from=node_base . .
 WORKDIR /src
 COPY "digify.csproj" . 
 RUN dotnet restore "digify.csproj"
