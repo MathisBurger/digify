@@ -25,7 +25,7 @@ public class Startup
         var jwtSigningKey = Configuration.GetValue<string>("Authorization:JWTSigningKey");
         services.AddControllers();
         services.AddDbContext<IContext, DatabaseContext>(ctx =>
-            ctx.UseNpgsql(Configuration.GetValue<string>("database:postgresConnectionString"))
+            ctx.UseNpgsql(Configuration.GetValue<string>("DATABASE_STRING"))
                 .EnableDetailedErrors()
         );
         services.AddSwaggerGen();
@@ -57,9 +57,9 @@ public class Startup
                 .AllowCredentials());
             app.UseSwagger();
             app.UseSwaggerUI();
+            app.UseHttpsRedirection();
         }
-
-        app.UseHttpsRedirection();
+        
 
         app.UseRouting();
 
