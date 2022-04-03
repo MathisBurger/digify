@@ -8,12 +8,12 @@ WORKDIR /src
 COPY "digify.csproj" . 
 RUN dotnet restore "digify.csproj"
 COPY . .
-RUN dotnet build "digify.csproj" -c Release /app/build
+RUN dotnet build "digify.csproj" -c Release
 
 FROM build as publish
-RUN dotnet publish "digify.csproj" -c Release /app/publish
+RUN dotnet publish "digify.csproj" -c Release
 
 FROM base as final
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=publish /app/bin/Release/net6.0/publish .
 ENTRYPOINT ["dotnet", "digify.dll"]
