@@ -141,6 +141,7 @@ namespace digify.Migrations
                     EndTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     SubjectColor = table.Column<string>(type: "text", nullable: false),
                     ApprovedByTeacher = table.Column<bool>(type: "boolean", nullable: false),
+                    TeacherId = table.Column<Guid>(type: "uuid", nullable: true),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
@@ -152,6 +153,11 @@ namespace digify.Migrations
                         principalTable: "ClassbookDayEntries",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ClassbookDayEntryLessons_Users_TeacherId",
+                        column: x => x.TeacherId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -186,7 +192,7 @@ namespace digify.Migrations
                     Start = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Day = table.Column<string>(type: "text", nullable: false),
                     End = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Teacher = table.Column<string>(type: "text", nullable: false),
+                    TeacherId = table.Column<Guid>(type: "uuid", nullable: false),
                     Room = table.Column<string>(type: "text", nullable: false),
                     SubjectColor = table.Column<string>(type: "text", nullable: false),
                     Subject = table.Column<string>(type: "text", nullable: false),
@@ -202,6 +208,12 @@ namespace digify.Migrations
                         principalTable: "Timetables",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TimeTableElements_Users_TeacherId",
+                        column: x => x.TeacherId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -213,6 +225,11 @@ namespace digify.Migrations
                 name: "IX_ClassbookDayEntryLessons_ParentDayEntryId",
                 table: "ClassbookDayEntryLessons",
                 column: "ParentDayEntryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClassbookDayEntryLessons_TeacherId",
+                table: "ClassbookDayEntryLessons",
+                column: "TeacherId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ClassbookDayEntryUser_MissingId",
@@ -228,6 +245,11 @@ namespace digify.Migrations
                 name: "IX_TimeTableElements_ParentId",
                 table: "TimeTableElements",
                 column: "ParentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TimeTableElements_TeacherId",
+                table: "TimeTableElements",
+                column: "TeacherId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_SchoolClassId",

@@ -15,7 +15,7 @@ public class DefaultController : ControllerBase
             return File("~/" + url, "text/html");
         }
 
-        return File("~/index.html", "text/html");
+        return NotFound();
     }
     
 }
