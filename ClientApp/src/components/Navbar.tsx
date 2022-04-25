@@ -32,14 +32,16 @@ const Navbar = () => {
                     >
                         Home
                     </Link>
-                    <Link
-                        variant="button"
-                        color="text.primary"
-                        onClick={() => history.push('/classes')}
-                        sx={{ my: 1, mx: 1.5 }}
-                    >
-                        Classes
-                    </Link>
+                    {!user?.roles.includes(UserRole.STUDENT) ? (
+                        <Link
+                            variant="button"
+                            color="text.primary"
+                            onClick={() => history.push('/classes')}
+                            sx={{ my: 1, mx: 1.5 }}
+                        >
+                            Classes
+                        </Link>
+                    ) : null}
                     <Link
                         variant="button"
                         color="text.primary"
