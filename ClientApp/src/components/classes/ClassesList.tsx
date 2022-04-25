@@ -2,7 +2,7 @@ import useApiService from "../../hooks/useApiService";
 import {GridColDef, GridRowModel} from "@mui/x-data-grid";
 import DataList from "../DataList/DataList";
 import {useEffect, useState} from "react";
-import {CalendarViewMonth, Remove} from "@mui/icons-material";
+import {CalendarViewMonth, Folder, Remove} from "@mui/icons-material";
 import {useHistory} from "react-router-dom";
 
 
@@ -63,6 +63,11 @@ const ClassesList = () => {
                     icon: CalendarViewMonth,
                     onClick: (row: GridRowModel) =>
                         history.push(`/timetable?action=forClass&elementId=${row.id}`)
+                },
+                {
+                    icon: Folder,
+                    onClick: (row: GridRowModel) =>
+                        history.push(`/classbook-specific?id=${row.classbook.id}`)
                 }
             ]}
         />

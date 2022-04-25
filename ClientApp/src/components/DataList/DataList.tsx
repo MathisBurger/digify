@@ -71,6 +71,7 @@ const DataList = ({
             {
                 field: 'actions',
                 headerName: 'Actions',
+                width: singleActions.length * 50,
                 renderCell: ({row}) => (
                     <Grid container direction="row">
                         {singleActions.map(item => (

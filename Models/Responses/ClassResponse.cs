@@ -24,6 +24,7 @@ public class ClassResponse
     public async Task<Class?> ParseSingle(Class cClass)
     {
         var fetchedClass = await Db.Classes
+            .Include(c => c.Classbook)
             .Include(c => c.Students)
             .Include(c => c.Teachers)
             .Where(c => cClass.Id == c.Id).FirstOrDefaultAsync();

@@ -32,6 +32,13 @@ const ClassbookList = () => {
             width: 100,
             flex: 1
         },
+        {
+            field: 'archived',
+            headerName: 'Archived',
+            width: 100,
+            type: 'boolean',
+            flex: 1
+        }
     ];
     
     const actions: SingleAction[] = [
@@ -42,7 +49,7 @@ const ClassbookList = () => {
     ];
     
     return (
-      <DataList columns={columns} rows={classbooks} singleActions={actions}  />
+      <DataList columns={columns} rows={classbooks} singleActions={actions} />
     );
 }
 
