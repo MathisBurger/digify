@@ -42,6 +42,7 @@ interface PageLayoutProps {
      * The title of the page
      */
     title: string;
+    sidebarContent?: JSX.Element;
 }
 
 /**
@@ -50,29 +51,32 @@ interface PageLayoutProps {
 const PageLayout = ({
     sidebarActions = [],
     title,
-    children
+    children,
+    sidebarContent
 }: React.PropsWithChildren<PageLayoutProps>) => {
     
     return (
         <>
             <Navbar />
             <Grid container direction="row" spacing={2} alignItems="center" minHeight="80vh" justifyContent="center">
-                {sidebarActions.length > 0 ? (
-                    <Grid item xs={2}>
+                {sidebarActions.length > 0 || sidebarContent ? (
+                    <Grid item xs={sidebarContent ? 3 : 2}>
                             <Toolbar />
                             <Card>
-                                <List>
-                                    {sidebarActions?.map((action, index) => (
-                                        <ListItem button key={index} onClick={action.action}>
-                                            {action.icon ? (
-                                                <ListItemIcon>
-                                                    <SvgIcon component={action.icon} />
-                                                </ListItemIcon>
-                                            ) : null}
-                                            <ListItemText primary={action.text} />
-                                        </ListItem>
-                                    ))}
-                                </List>
+                                {sidebarContent ? sidebarContent : (
+                                    <List>
+                                        {sidebarActions?.map((action, index) => (
+                                            <ListItem button key={index} onClick={action.action}>
+                                                {action.icon ? (
+                                                    <ListItemIcon>
+                                                        <SvgIcon component={action.icon} />
+                                                    </ListItemIcon>
+                                                ) : null}
+                                                <ListItemText primary={action.text} />
+                                            </ListItem>
+                                        ))}
+                                    </List>
+                                )}
                             </Card>
                     </Grid>
                 ) : null}
