@@ -11,9 +11,10 @@ interface ClassbookMissingViewProps {
     students: User[];
     classbookID: string;
     setClassbook: (classbook: Classbook) => void;
+    editorMode: boolean;
 }
 
-const ClassbookMissingView = ({missingStudents, students, classbookID, setClassbook}: ClassbookMissingViewProps) => {
+const ClassbookMissingView = ({missingStudents, students, classbookID, setClassbook, editorMode}: ClassbookMissingViewProps) => {
     
     const [anchorEl, setAnchorEl] = useState<any>(null);
     const dropdownOpen = Boolean(anchorEl);
@@ -43,11 +44,13 @@ const ClassbookMissingView = ({missingStudents, students, classbookID, setClassb
                             <ListItemText>{student.username}</ListItemText>
                         </ListItem>
                     ))}
-                    <ListItem button onClick={(e) => setAnchorEl(e.currentTarget)}>
-                        <ListItemIcon>
-                            <Add />
-                        </ListItemIcon>
-                    </ListItem>
+                    {editorMode ? (
+                        <ListItem button onClick={(e) => setAnchorEl(e.currentTarget)}>
+                            <ListItemIcon>
+                                <Add />
+                            </ListItemIcon>
+                        </ListItem>
+                    ) : null}
                 </List>
             </Card>
             {unaddedStudents.length > 0 ? (
@@ -67,6 +70,7 @@ const ClassbookMissingView = ({missingStudents, students, classbookID, setClassb
                     userID={'' + removeUser}
                     classbookID={classbookID}
                     setClassbook={setClassbook}
+                    editorMode={editorMode}
                 />
             ) : null}
         </>

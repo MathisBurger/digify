@@ -8,7 +8,7 @@ const SpecificClassbookPage = () => {
     
     return (
         <PageLayout title="Specific Classbook">
-            <ClassbookDisplay id={params.get('id') ?? undefined} />
+            <ClassbookDisplay id={params.get('id') ?? undefined} editingMode={true} />
         </PageLayout>
     );
 }

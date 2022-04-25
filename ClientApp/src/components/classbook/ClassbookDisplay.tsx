@@ -11,9 +11,10 @@ import ClassbookDayEntryNotes from "./ClassbookDayEntryNotes";
 
 interface ClassbookDisplayProps {
     id?: string;
+    editingMode?: boolean;
 }
 
-const ClassbookDisplay = ({id}: ClassbookDisplayProps) => {
+const ClassbookDisplay = ({id, editingMode}: ClassbookDisplayProps) => {
     
     const apiService = useApiService();
     const {user} = useCurrentUser();
@@ -61,6 +62,7 @@ const ClassbookDisplay = ({id}: ClassbookDisplayProps) => {
                     lessons={getCurrentDayLessons()} 
                     loading={classbook === null} 
                     classbookID={classbook?.id ?? ""}
+                    editorMode={editingMode ?? false}
                 />
             </Grid>
             <Grid item xs={3}>
@@ -69,10 +71,15 @@ const ClassbookDisplay = ({id}: ClassbookDisplayProps) => {
                     students={classbook?.referedClass.students ?? []}
                     classbookID={classbook?.id ?? ''}
                     setClassbook={(cb: Classbook) => setClassbook(cb)}
+                    editorMode={editingMode ?? false}
                 />
             </Grid>
             <Grid item xs={3}>
-                <ClassbookDayEntryNotes notes={getCurrentDayNotes()}  classbookID={classbook?.id ?? ''} />
+                <ClassbookDayEntryNotes 
+                    notes={getCurrentDayNotes()}
+                    classbookID={classbook?.id ?? ''}
+                    editorMode={editingMode ?? false} 
+                />
             </Grid>
         </Grid>
     );

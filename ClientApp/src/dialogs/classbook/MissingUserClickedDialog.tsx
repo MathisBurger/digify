@@ -8,9 +8,10 @@ interface MissingUserClickedDialogProps {
     userID: string;
     classbookID: string;
     setClassbook: (classbook: Classbook) => void;
+    editorMode: boolean;
 }
 
-const MissingUserClickedDialog = ({close, userID, setClassbook, classbookID}: MissingUserClickedDialogProps) => {
+const MissingUserClickedDialog = ({close, userID, setClassbook, classbookID, editorMode}: MissingUserClickedDialogProps) => {
     
     const apiService = useApiService();
     
@@ -28,7 +29,7 @@ const MissingUserClickedDialog = ({close, userID, setClassbook, classbookID}: Mi
                     </DialogContent>
                     <DialogActions>
                         <Button color="primary" variant="contained" disabled>User profile</Button>
-                        <Button color="primary" variant="contained" onClick={removeMissing}>Remove Missing</Button>
+                        {editorMode ? <Button color="primary" variant="contained" onClick={removeMissing}>Remove Missing</Button> : null}
                     </DialogActions>
                 </Dialog>
     );

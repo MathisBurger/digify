@@ -29,8 +29,13 @@ public class ClassbookResponse
             .Include(c => c.DayEntries)
             .Where(c => c.Id == classbook.Id)
             .FirstOrDefaultAsync();
+        var referedClass = await Db.Classes
+            .Include(c => c.Students)
+            .Include(c => c.Teachers)
+            .FirstOrDefaultAsync(c => c.Id == fetchedClassbook!.ReferedClass!.Id);
         var entries = new List<ClassbookDayEntry>();
         if (fetchedClassbook == null) return null;
+        fetchedClassbook.ReferedClass = referedClass;
         foreach (var classbookDayEntry in fetchedClassbook.DayEntries)
         {
             var entry = (await Db.ClassbookDayEntries

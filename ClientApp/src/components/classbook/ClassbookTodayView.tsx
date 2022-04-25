@@ -8,9 +8,10 @@ interface ClassbookTodayViewProps {
     lessons: ClassbookDayEntryLesson[];
     classbookID: string;
     loading: boolean;
+    editorMode: boolean;
 }
 
-const ClassbookTodayView = ({lessons, loading, classbookID}: ClassbookTodayViewProps) => {
+const ClassbookTodayView = ({lessons, loading, classbookID, editorMode}: ClassbookTodayViewProps) => {
     
     const apiService = useApiService();
     const snackbar = useSnackbar();
@@ -30,7 +31,7 @@ const ClassbookTodayView = ({lessons, loading, classbookID}: ClassbookTodayViewP
           field: 'teacher',
           headerName: 'Teacher',
           renderCell: ({row}) => row.teacher.username,
-          editable: true,
+          editable: editorMode,
           type: 'singleSelect'  
         },
         {
@@ -43,13 +44,13 @@ const ClassbookTodayView = ({lessons, loading, classbookID}: ClassbookTodayViewP
             headerName: 'Approved by Teacher',
             width: 50,
             type: 'boolean',
-            editable: true,
+            editable: editorMode,
         },
         {
             field: 'content',
             headerName: 'content',
             flex: 1,
-            editable: true
+            editable: editorMode
         },
         {
             field: 'time',

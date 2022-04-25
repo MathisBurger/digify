@@ -6,9 +6,10 @@ import useSnackbar from "../../hooks/useSnackbar";
 interface ClassbookDayEntryNotesProps {
     notes: string;
     classbookID: string;
+    editorMode: boolean;
 }
 
-const ClassbookDayEntryNotes = ({notes, classbookID}: ClassbookDayEntryNotesProps) => {
+const ClassbookDayEntryNotes = ({notes, classbookID, editorMode}: ClassbookDayEntryNotesProps) => {
 
     console.log(notes);
     
@@ -35,11 +36,14 @@ const ClassbookDayEntryNotes = ({notes, classbookID}: ClassbookDayEntryNotesProp
                     onChange={(e) => setNote(e.target.value)}
                     value={note ?? notes}
                     sx={{width: '100%', height: '100%'}}
+                    disabled={!editorMode}
                 />
             </Grid>
-            <Grid item>
-                <Button variant="contained" color="primary" onClick={() => updateNotes()}>Speichern</Button>
-            </Grid>
+            {editorMode ? (
+                <Grid item>
+                    <Button variant="contained" color="primary" onClick={() => updateNotes()}>Speichern</Button>
+                </Grid>
+            ) : null}
         </Grid>
     );
 }
