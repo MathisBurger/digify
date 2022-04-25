@@ -94,6 +94,21 @@ public class ClassbookService
             .Where(c => c.ReferedClass!.Id == fetchedClass.Id)
             .FirstOrDefaultAsync();
         if (classbook == null) throw new Exception("Element relation error");
+        if (classbook.Year != DateTime.Now.Year.ToString())
+        {
+            classbook.Archived = true;
+            classbook.ArchivedDate = DateTime.Now;
+            classbook.ArchivedName = classbook.ReferedClass!.Name + " - " + classbook.Year;
+            var refered = classbook.ReferedClass;
+            classbook.ReferedClass = null;
+            Db.Classbooks.Update(classbook);
+            classbook = new Classbook();
+            classbook.Year = DateTime.Now.Year.ToString();
+            classbook.Archived = false;
+            classbook.ReferedClass = refered;
+            Db.Classbooks.Add(classbook);
+            await Db.SaveChangesAsync();
+        }
         var todayEntry = await Db.ClassbookDayEntries
             .Where(e => e.CurrentDate.DayOfYear == DateTime.Now.DayOfYear)
             .FirstOrDefaultAsync();
