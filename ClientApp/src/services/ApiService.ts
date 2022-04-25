@@ -189,4 +189,20 @@ export default class APIService extends RestService {
             notes: notes
         }));
     }
+
+    /**
+     * Gets a list of all classbooks a teacher has access to.
+     */
+    public async getClassbooksForTeacher(): Promise<Classbook[]> {
+        return await this.get<Classbook[]>(`${ORIGIN}/classbook/getForTeacher`);
+    }
+
+    /**
+     * Gets a specific classbook from the API
+     * 
+     * @param id The ID of the classbook that should be fetched
+     */
+    public async getSpecificClassbook(id: string): Promise<Classbook> {
+        return await this.get<Classbook>(`${ORIGIN}/classbook/getSpecific/${id}`);
+    }
 }

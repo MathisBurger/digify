@@ -148,4 +148,36 @@ public class ClassbookController : AuthorizedControllerBase
         await Db.SaveChangesAsync();
         return (await new ClassbookResponse(Db).ParseSingle(await Db.Classbooks.FindAsync(request.Id)))!;
     }
+
+    [HttpGet("/api/classbook/getForTeacher")]
+    [TypeFilter(typeof(RequiresAuthorization))]
+    public async Task<ActionResult<List<Classbook>>> GetAllClassbooksForTeachers()
+    {
+        if (Authorization.IsGranted(AuthorizedUser, ClassbookVoter.UPDATE_LESSON, new ClassbookVoter(Db)))
+        {
+            var classbooks = await Db.Classbooks
+                .Include(c => c.DayEntries)
+                .Include(c => c.ReferedClass)
+                .ToListAsync();
+            return Ok(classbooks);
+        }
+
+        return Unauthorized();
+    }
+
+    [HttpGet("/api/classbook/getSpecific/{id}")]
+    [TypeFilter(typeof(RequiresAuthorization))]
+    public async Task<ActionResult<Classbook>> GetSpecificClassbook([FromRoute] Guid id)
+    {
+        var classbook = await Db.Classbooks
+            .Include(c => c.DayEntries)
+            .Include(c => c.ReferedClass)
+            .FirstOrDefaultAsync(c => c.Id == id);
+        if (Authorization.IsGranted(AuthorizedUser, ClassbookVoter.GET_CLASSBOOK, new ClassbookVoter(Db, classbook)))
+        {
+            return Ok(await new ClassbookResponse(Db).ParseSingle(classbook));
+        }
+
+        return Unauthorized();
+    }
 }

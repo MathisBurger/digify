@@ -10,7 +10,7 @@ import React, {useMemo} from "react";
 import {MuiIcon} from "../PageLayout";
 
 
-interface SingleAction {
+export interface SingleAction {
     /**
      * The icon of the action
      */

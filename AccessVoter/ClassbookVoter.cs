@@ -31,6 +31,11 @@ public class ClassbookVoter : IVoter
     /// If the current user is allowed to update the notes of a day entry.
     /// </summary>
     public const string UPDATE_NOTES = "UPDATE_NOTES";
+
+    /// <summary>
+    /// If the user can get a specific classbook
+    /// </summary>
+    public const string GET_CLASSBOOK = "GET_CLASSBOOK";
     
     /// <summary>
     /// The <see cref="User"/> that performs the
@@ -44,9 +49,12 @@ public class ClassbookVoter : IVoter
     /// </summary>
     private IContext DatabaseRepository { get; set; }
     
-    public ClassbookVoter(IContext db)
+    private Classbook? ActionClassbook { get; set; }
+    
+    public ClassbookVoter(IContext db, Classbook? classbook = null)
     {
         DatabaseRepository = db;
+        ActionClassbook = classbook;
     }
     
     /// <inheritdoc cref="IVoter"/>
@@ -67,6 +75,8 @@ public class ClassbookVoter : IVoter
             case REMOVE_MISSING_PERSON:
             case UPDATE_NOTES:    
                 return ActionUser.Roles.Contains(UserRoles.TEACHER) || UserIsAdmin();
+            case GET_CLASSBOOK:
+                return UserCanAccessClassbook();
             default:
                 return false;
         }
@@ -77,4 +87,23 @@ public class ClassbookVoter : IVoter
     /// </summary>
     /// <returns>If the user is an admin</returns>
     private bool UserIsAdmin() => ActionUser.Roles.Contains(UserRoles.ADMIN);
+
+    /// <summary>
+    /// Checks if the current user has access to the requested classbook
+    /// </summary>
+    /// <returns>If the user has access</returns>
+    private bool UserCanAccessClassbook()
+    {
+        if (UserIsAdmin() || ActionUser.Roles.Contains(UserRoles.TEACHER))
+        {
+            return true;
+        }
+
+        if (ActionClassbook == null)
+        {
+            return false;
+        }
+
+        return ActionClassbook.ReferedClass!.Students.Contains(ActionUser);
+    }
 }

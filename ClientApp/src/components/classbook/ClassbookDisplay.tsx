@@ -9,7 +9,11 @@ import ClassbookMissingView from "./ClassbookMissingView";
 import ClassbookDayEntryNotes from "./ClassbookDayEntryNotes";
 
 
-const ClassbookDisplay = () => {
+interface ClassbookDisplayProps {
+    id?: string;
+}
+
+const ClassbookDisplay = ({id}: ClassbookDisplayProps) => {
     
     const apiService = useApiService();
     const {user} = useCurrentUser();
@@ -17,7 +21,9 @@ const ClassbookDisplay = () => {
     
     useEffect(() => {
         const fetcher = async () => {
-            if (user?.roles.includes(UserRole.STUDENT)) {
+            if (!user?.roles.includes(UserRole.STUDENT) && id) {
+                setClassbook(await apiService.getSpecificClassbook(id));
+            } else {
                 setClassbook(await apiService.getClassbookForCurrentUser());
             }
         };
